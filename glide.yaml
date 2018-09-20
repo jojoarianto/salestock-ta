@@ -1,0 +1,8 @@
+package: salestock-ta
+import:
+- package: github.com/jinzhu/gorm
+  version: v1.9.1
+  subpackages:
+  - dialects/sqlite
+- package: github.com/gorilla/mux
+  version: v1.6.2

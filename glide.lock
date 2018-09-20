@@ -1,0 +1,10 @@
+hash: 40459370ead97df6b810fa3c0337dff4abb1e950ca4b9de586f6a65e909ee38f
+updated: 2018-09-21T06:25:08.761406+07:00
+imports:
+- name: github.com/gorilla/mux
+  version: e3702bed27f0d39777b0b37b664b6280e8ef8fbf
+- name: github.com/jinzhu/gorm
+  version: 6ed508ec6a4ecb3531899a69cbc746ccf65a4166
+  subpackages:
+  - dialects/sqlite
+testImports: []

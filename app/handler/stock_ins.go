@@ -12,9 +12,9 @@ import (
 
 // handler for get all data stockin
 func GetStockIns(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
-	stockin := []model.Stock_ins{} // array of stock_in
+	stockin := []model.Stock_ins{}
 
-	db.Find(&stockin) // get all stock in
+	db.Preload("Product").Find(&stockin)
 	respondWithJson(w, http.StatusOK, stockin)
 }
 
@@ -29,15 +29,16 @@ func CreateStockIns(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 
 	// search the product first
-	vars := mux.Vars(r) // get parameter
+	vars := mux.Vars(r)
 	product_id := vars["product_id"]
 	product := model.Product{}
-	if err := db.First(&product, product_id).Error; err != nil { // Get record with primary key (only works for integer primary key)
+
+	// Search product
+	// Get record with primary key (only works for integer primary key)
+	if err := db.First(&product, product_id).Error; err != nil {
 		respondWithError(w, http.StatusNotFound, err.Error()) // print record not found
 		return
 	}
-	// product := getProductsOr404(db, product_id, w, r) // make sure record is exist
-
 	stockin.Product = product
 
 	if err := db.Save(&stockin).Error; err != nil {

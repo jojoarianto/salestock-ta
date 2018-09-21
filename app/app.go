@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"salestock-ta/app/handler"
-	// "salestock-ta/app/model"
+	"salestock-ta/app/model"
 	"salestock-ta/config"
 
 	"github.com/gorilla/mux"
@@ -29,9 +29,7 @@ func (a *App) Initialize(config *config.Config) {
 
 	log.Printf("Database connected")
 
-	a.DB = db // set db
-
-	// a.DB = model.DBMigrate(db) // open for migration purpose only
+	a.DB = model.DBMigrate(db) // migration
 	a.Router = mux.NewRouter()
 	a.setRouters()
 }
@@ -40,6 +38,7 @@ func (a *App) Initialize(config *config.Config) {
 func (a *App) setRouters() {
 	// Routing for handling the products
 	a.Router.HandleFunc("/api/products", a.GetAllProducts).Methods("GET")
+	a.Router.HandleFunc("/api/products", a.CreateProduct).Methods("POST")
 
 	// Routing for handling stock_in
 	a.Router.HandleFunc("/api/stock-ins", a.GetStockIns).Methods("GET")
@@ -51,6 +50,11 @@ func (a *App) setRouters() {
 // handler for get all product
 func (a *App) GetAllProducts(w http.ResponseWriter, r *http.Request) {
 	handler.GetAllProducts(a.DB, w, r)
+}
+
+// handler for create stock_in
+func (a *App) CreateProduct(w http.ResponseWriter, r *http.Request) {
+	handler.CreateProduct(a.DB, w, r)
 }
 
 // handler for get all stock in

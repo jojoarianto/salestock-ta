@@ -1,35 +1,36 @@
 -- create products tabel
--- CREATE TABLE IF NOT EXISTS products (
--- 	id INTEGER PRIMARY KEY, 
--- 	sku TEXT, 
--- 	name TEXT,
--- 	stocks INTEGER
--- );
+-------------------------------
 
 CREATE TABLE IF NOT EXISTS "products" (
 	"id" integer primary key autoincrement,
-	"created_at" datetime,
-	"updated_at" datetime,
-	"deleted_at" datetime,
 	"sku" varchar(255),
 	"name" varchar(255),
-	"stocks" integer 
+	"stocks" integer,
+	"created_at" datetime, -- auto from gorm.Model
+	"updated_at" datetime, -- auto from gorm.Model
+	"deleted_at" datetime  -- auto from gorm.Model
 );
 CREATE TABLE sqlite_sequence(name,seq);
 CREATE INDEX idx_products_deleted_at ON "products"(deleted_at) ;
 
--- create stock_ins tabel
-CREATE TABLE IF NOT EXISTS stock_ins (
-	id INTEGER PRIMARY KEY, 
-	transaction_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	product_id INTEGER,
-	order_qty INTEGER,
-	received_qty INTEGER,
-	purchase_price INTEGER,
-	total_price INTEGER,
-	receipt TEXT,
-	FOREIGN KEY (product_id) REFERENCES products(id)
+-- end products tabel
+-------------------------------
+
+CREATE TABLE IF NOT EXISTS "stock_ins" (
+	"id" integer primary key autoincrement,
+	"transaction_time" datetime,
+	"product_id" integer,
+	"order_qty" integer,
+	"received_qty" integer,
+	"purchase_price" integer,
+	"total_price" integer,
+	"receipt" varchar(255),
+	"created_at" datetime, -- auto from gorm.Model
+	"updated_at" datetime, -- auto from gorm.Model
+	"deleted_at" datetime, -- auto from gorm.Model 
 );
+CREATE INDEX idx_stock_ins_deleted_at ON "stock_ins"(deleted_at) ;
+
 
 -- create stock_ins_progress tabel
 CREATE TABLE IF NOT EXISTS stock_ins_progress (

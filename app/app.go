@@ -31,8 +31,7 @@ func (a *App) Initialize(config *config.Config) {
 
 	a.DB = db // set db
 
-	// a.DB = model.DBMigrate(db) // for migration purpose only
-
+	a.DB = model.DBMigrate(db) // for migration purpose only
 	a.Router = mux.NewRouter()
 	a.setRouters()
 }
@@ -41,11 +40,19 @@ func (a *App) Initialize(config *config.Config) {
 func (a *App) setRouters() {
 	// Routing for handling the products
 	a.Router.HandleFunc("/products", a.GetAllProducts).Methods("GET")
+
+	// Routing for handling stock_in
+	a.Router.HandleFunc("/stock-ins", a.CreateStockIns).Methods("POST")
 }
 
-// handler
+// handler for get all product
 func (a *App) GetAllProducts(w http.ResponseWriter, r *http.Request) {
 	handler.GetAllProducts(a.DB, w, r)
+}
+
+// handler for create stock_in
+func (a *App) CreateStockIns(w http.ResponseWriter, r *http.Request) {
+	handler.CreateStockIns(a.DB, w, r)
 }
 
 // Run the app on it's router

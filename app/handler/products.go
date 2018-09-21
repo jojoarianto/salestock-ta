@@ -10,7 +10,7 @@ import (
 )
 
 func GetAllProducts(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
-	products := []model.Product{}
+	products := []model.Product{} // array of product
 	db.Find(&products)
 	respondWithJson(w, http.StatusOK, products)
 }

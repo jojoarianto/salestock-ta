@@ -44,6 +44,7 @@ func (a *App) setRouters() {
 	// Routing for handling stock_in
 	a.Router.HandleFunc("/api/stock-ins", a.GetStockIns).Methods("GET")
 	a.Router.HandleFunc("/api/stock-ins", a.CreateStockIns).Methods("POST")
+	a.Router.HandleFunc("/api/stock-ins", a.UpdateStockIns).Methods("PUT")
 	a.Router.HandleFunc("/api/stock-ins", a.DeleteStockIns).Methods("DELETE")
 }
 
@@ -60,6 +61,11 @@ func (a *App) GetStockIns(w http.ResponseWriter, r *http.Request) {
 // handler for create stock_in
 func (a *App) CreateStockIns(w http.ResponseWriter, r *http.Request) {
 	handler.CreateStockIns(a.DB, w, r)
+}
+
+// handler for create stock_in
+func (a *App) UpdateStockIns(w http.ResponseWriter, r *http.Request) {
+	handler.UpdateStockIns(a.DB, w, r)
 }
 
 // handler for delete stock_in

@@ -10,7 +10,10 @@
 
 ## API
 
-#### /stock-ins
+#### /api/products
+* `GET` : Get all products
+
+#### /api/stock-ins
 * `GET` : Get all stock in
 * `POST` : Create a stock in
 
@@ -22,7 +25,7 @@ Post `/stock-ins` with this json
 	"transaction_time":"2018-09-21T14:42:49.77869956+07:00",
 	"product_id":1,
 	"order_qty":100,
-	"received_qty":100,
+	"received_qty":0,
 	"purchase_price":1000,
 	"total_price":1000000,
 	"receipt":"ASP"

@@ -36,12 +36,13 @@ func (a *App) Initialize(config *config.Config) {
 
 // setRouters sets the all required routers
 func (a *App) setRouters() {
-	// Routing for handling the products
+	// Routing for handling products
 	a.Router.HandleFunc("/api/products", a.GetAllProducts).Methods("GET")
 	a.Router.HandleFunc("/api/products", a.CreateProduct).Methods("POST")
 
 	// Routing for handling stock_in
-	a.Router.HandleFunc("/api/stock-ins", a.GetStockIns).Methods("GET")
+	a.Router.HandleFunc("/api/stock-ins", a.GetAllStockIns).Methods("GET")
+	a.Router.HandleFunc("/api/stock-ins/{id}", a.GetStockIn).Methods("GET")
 	a.Router.HandleFunc("/api/stock-ins", a.CreateStockIns).Methods("POST")
 	a.Router.HandleFunc("/api/stock-ins", a.UpdateStockIns).Methods("PUT")
 	a.Router.HandleFunc("/api/stock-ins", a.DeleteStockIns).Methods("DELETE")
@@ -58,8 +59,13 @@ func (a *App) CreateProduct(w http.ResponseWriter, r *http.Request) {
 }
 
 // handler for get all stock in
-func (a *App) GetStockIns(w http.ResponseWriter, r *http.Request) {
-	handler.GetStockIns(a.DB, w, r)
+func (a *App) GetAllStockIns(w http.ResponseWriter, r *http.Request) {
+	handler.GetAllStockIns(a.DB, w, r)
+}
+
+// handler for get all stock in
+func (a *App) GetStockIn(w http.ResponseWriter, r *http.Request) {
+	handler.GetStockIn(a.DB, w, r)
 }
 
 // handler for create stock_in

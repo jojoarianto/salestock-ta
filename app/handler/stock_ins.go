@@ -11,10 +11,23 @@ import (
 )
 
 // handler for get all data stockin
-func GetStockIns(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
+func GetAllStockIns(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	stockin := []model.Stock_ins{}
 
 	db.Preload("Product").Find(&stockin)
+	respondWithJson(w, http.StatusOK, stockin)
+}
+
+// handler for get single ddata stockin
+func GetStockIn(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r) // get parameter url
+	id := vars["id"]
+
+	stockin := model.Stock_ins{}
+	if err := db.Preload("Product").Find(&stockin, id).Error; err != nil {
+		respondWithError(w, http.StatusNotFound, err.Error())
+		return
+	}
 	respondWithJson(w, http.StatusOK, stockin)
 }
 

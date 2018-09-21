@@ -17,8 +17,14 @@
 #### /api/stock-ins
 * `GET` : Get all stock in
 * `POST` : Create a stock in
-* `PUT` : Update a stock in
+
+#### /api/stock-ins/:id
+* `GET` : Get a stock in
 * `DELETE` : Delete a stock in
+* `PUT` : Update a stock in
+
+#### /api/stock-ins/:id/progress
+* `POST` : Create a stock in progress
 
 ## Usage
 

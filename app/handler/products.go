@@ -1,12 +1,16 @@
 package handler
 
 import (
-	"fmt"
+	// "fmt"
+	// "log"
 	"net/http"
 
 	"github.com/jinzhu/gorm"
+	"salestock-ta/app/model"
 )
 
 func GetAllProducts(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "END POINT GET ALL PRODUCT")
+	products := []model.Product{}
+	db.Find(&products)
+	respondWithJson(w, http.StatusOK, products)
 }

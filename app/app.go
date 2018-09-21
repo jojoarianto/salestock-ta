@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"salestock-ta/app/handler"
+	"salestock-ta/app/model"
 	"salestock-ta/config"
 
 	"github.com/gorilla/mux"
@@ -29,6 +30,9 @@ func (a *App) Initialize(config *config.Config) {
 	log.Printf("Database connected")
 
 	a.DB = db // set db
+
+	// a.DB = model.DBMigrate(db) // for migration purpose only
+
 	a.Router = mux.NewRouter()
 	a.setRouters()
 }

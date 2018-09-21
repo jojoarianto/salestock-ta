@@ -14,8 +14,8 @@ type DBConfig struct {
 func GetConfig() *Config {
 	return &Config{
 		DB: &DBConfig{
-			Dialeg: "sqlite3",                  // use sqlite database
-			DBUri:  "database/salestock-ta.db", // db uri for sqlite3 which is url file
+			Dialeg: "sqlite3",                       // use sqlite database
+			DBUri:  "database/salestock-ta.sqlite3", // db uri for sqlite3 which is url file
 		},
 	}
 }

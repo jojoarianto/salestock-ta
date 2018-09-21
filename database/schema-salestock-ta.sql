@@ -1,10 +1,22 @@
 -- create products tabel
-CREATE TABLE IF NOT EXISTS products (
-	id INTEGER PRIMARY KEY, 
-	sku TEXT, 
-	name TEXT,
-	stocks INTEGER
+-- CREATE TABLE IF NOT EXISTS products (
+-- 	id INTEGER PRIMARY KEY, 
+-- 	sku TEXT, 
+-- 	name TEXT,
+-- 	stocks INTEGER
+-- );
+
+CREATE TABLE IF NOT EXISTS "products" (
+	"id" integer primary key autoincrement,
+	"created_at" datetime,
+	"updated_at" datetime,
+	"deleted_at" datetime,
+	"sku" varchar(255),
+	"name" varchar(255),
+	"stocks" integer 
 );
+CREATE TABLE sqlite_sequence(name,seq);
+CREATE INDEX idx_products_deleted_at ON "products"(deleted_at) ;
 
 -- create stock_ins tabel
 CREATE TABLE IF NOT EXISTS stock_ins (

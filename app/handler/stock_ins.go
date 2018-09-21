@@ -12,7 +12,7 @@ import (
 
 // handler for get all data stockin
 func GetAllStockIns(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
-	stockin := []model.Stock_ins{}
+	stockin := []model.StockIn{}
 
 	db.Preload("Product").Find(&stockin)
 	respondWithJson(w, http.StatusOK, stockin)
@@ -23,7 +23,7 @@ func GetStockIn(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r) // get parameter url
 	id := vars["id"]
 
-	stockin := model.Stock_ins{}
+	stockin := model.StockIn{}
 	if err := db.Preload("Product").Find(&stockin, id).Error; err != nil {
 		respondWithError(w, http.StatusNotFound, err.Error())
 		return
@@ -32,7 +32,7 @@ func GetStockIn(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 }
 
 func CreateStockIns(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
-	stockin := model.Stock_ins{}
+	stockin := model.StockIn{}
 
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(&stockin); err != nil {
@@ -105,8 +105,8 @@ func UpdateStockIns(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 }
 
 // getStockinsOr404 gets a stockin instance if exists, or respond the 404 error otherwise
-func getStockinsOr404(db *gorm.DB, id string, w http.ResponseWriter, r *http.Request) *model.Stock_ins {
-	stockin := model.Stock_ins{}
+func getStockinsOr404(db *gorm.DB, id string, w http.ResponseWriter, r *http.Request) *model.StockIn {
+	stockin := model.StockIn{}
 
 	if err := db.First(&stockin, id).Error; err != nil { // Get record with primary key (only works for integer primary key)
 		respondWithError(w, http.StatusNotFound, err.Error()) // print record not found

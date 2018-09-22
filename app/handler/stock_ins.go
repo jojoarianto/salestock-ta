@@ -33,6 +33,7 @@ func GetStockIn(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	respondWithJson(w, http.StatusOK, stockin)
 }
 
+// handler for create a single stock in
 func CreateStockIns(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	stockin := model.StockIn{}
 

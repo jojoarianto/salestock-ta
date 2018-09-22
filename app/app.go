@@ -50,17 +50,29 @@ func (a *App) setRouters() {
 	// Routing for handling stock_in_progress
 	a.Router.HandleFunc("/api/stock-ins/{id}/progress", a.GetAllProgressStockIns).Methods("GET")
 	a.Router.HandleFunc("/api/stock-ins/{id}/progress", a.CreateProgressStockIns).Methods("POST")
+
+	// Routing for handling stock_out
+	a.Router.HandleFunc("/api/stock-outs", a.GetAllStockOuts).Methods("GET")
+	a.Router.HandleFunc("/api/stock-outs", a.CreateStockOuts).Methods("POST")
 }
+
+// =============================
+//    PRODUCT
+// =============================
 
 // handler for get all product
 func (a *App) GetAllProducts(w http.ResponseWriter, r *http.Request) {
 	handler.GetAllProducts(a.DB, w, r)
 }
 
-// handler for create stock_in
+// handler for create product
 func (a *App) CreateProduct(w http.ResponseWriter, r *http.Request) {
 	handler.CreateProduct(a.DB, w, r)
 }
+
+// =============================
+//    STOCK IN / BARANG MASUK
+// =============================
 
 // handler for get all stock in
 func (a *App) GetAllStockIns(w http.ResponseWriter, r *http.Request) {
@@ -87,6 +99,10 @@ func (a *App) DeleteStockIns(w http.ResponseWriter, r *http.Request) {
 	handler.DeleteStockIns(a.DB, w, r)
 }
 
+// =============================
+//    PROGRESS STOCK IN / PROGRESS BARANG MASUK
+// =============================
+
 // handler for get all [rpgress] stock in
 func (a *App) GetAllProgressStockIns(w http.ResponseWriter, r *http.Request) {
 	handler.GetAllProgressStockIns(a.DB, w, r)
@@ -95,6 +111,20 @@ func (a *App) GetAllProgressStockIns(w http.ResponseWriter, r *http.Request) {
 // handler for create a single progress stock in
 func (a *App) CreateProgressStockIns(w http.ResponseWriter, r *http.Request) {
 	handler.CreateProgressStockIns(a.DB, w, r)
+}
+
+// =============================
+//    STOCK OUT / BARANG KELUAR
+// =============================
+
+// handler for get all stock out
+func (a *App) GetAllStockOuts(w http.ResponseWriter, r *http.Request) {
+	handler.GetAllStockOuts(a.DB, w, r)
+}
+
+// handler for create stock_out
+func (a *App) CreateStockOuts(w http.ResponseWriter, r *http.Request) {
+	handler.CreateStockOuts(a.DB, w, r)
 }
 
 // Run the app on it's router

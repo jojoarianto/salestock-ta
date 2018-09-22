@@ -125,6 +125,18 @@ Post `/api/stock-ins` Response
 }
 ```
 
+Post `/api/stock-out` with this json
+```json
+{
+    "transaction_time":"2018-09-21T14:42:49.77869956+07:00",
+    "product_id":1,
+    "out_qty":1,
+    "sell_price":100,
+    "total_price":1000,
+    "transaction_id":"testing",
+    "status_out_code":1
+}
+```
 
 ## Note
 README will update soon

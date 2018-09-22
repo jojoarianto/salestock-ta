@@ -36,6 +36,10 @@ func CreateProgressStockIns(db *gorm.DB, w http.ResponseWriter, r *http.Request)
 		return // record not found
 	}
 
+	//====== BEGIN TRANSACTION
+
+	// tx := db.Begin()
+
 	// insert progress
 	progress := model.StockInProgress{}
 	decoder := json.NewDecoder(r.Body)
@@ -49,6 +53,8 @@ func CreateProgressStockIns(db *gorm.DB, w http.ResponseWriter, r *http.Request)
 		respondWithError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
+
+	//====== END TRANSACTION
 
 	respondWithJson(w, http.StatusOK, &progress)
 }

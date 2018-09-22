@@ -29,6 +29,55 @@
 
 ## Usage
 
+GET `/api/stock-in` with this json
+```json
+[
+    {
+        "ID": 1,
+        "CreatedAt": "2018-09-22T15:36:03.697961927+07:00",
+        "UpdatedAt": "2018-09-22T17:05:34.153181848+07:00",
+        "DeletedAt": null,
+        "stock_in_time": "0001-01-01T00:00:00Z",
+        "product_id": 1,
+        "Product": {
+            "ID": 1,
+            "CreatedAt": "2018-09-22T15:35:37.861424368+07:00",
+            "UpdatedAt": "2018-09-22T17:05:34.152808305+07:00",
+            "DeletedAt": null,
+            "sku": "SSI-D00791015-LL-BWH",
+            "name": "Zalekia Plain Casual Blouse (L,Broken White)",
+            "stocks": 0
+        },
+        "order_qty": 50,
+        "received_qty": 0,
+        "purchase_price": 1000,
+        "total_price": 100000,
+        "receipt": "IRIANTO-99-NEW-99",
+        "Progress": [
+            {
+                "ID": 1,
+                "CreatedAt": "2018-09-22T16:43:30.793632901+07:00",
+                "UpdatedAt": "2018-09-22T17:05:34.153397007+07:00",
+                "DeletedAt": null,
+                "stock_in_progress_time": "2018-09-21T14:42:49.77869956+07:00",
+                "stock_ins_id": 1,
+                "qty": 3
+            },
+            {
+                "ID": 2,
+                "CreatedAt": "2018-09-22T16:50:20.024516655+07:00",
+                "UpdatedAt": "2018-09-22T17:05:34.153575862+07:00",
+                "DeletedAt": null,
+                "stock_in_progress_time": "2018-09-21T14:42:49.77869956+07:00",
+                "stock_ins_id": 1,
+                "qty": 5
+            }
+        ]
+    },
+    ...
+]
+```
+
 Post `/api/products` with this json
 ```json
 {

@@ -48,8 +48,8 @@ func (a *App) setRouters() {
 	a.Router.HandleFunc("/api/stock-ins/{id}", a.DeleteStockIns).Methods("DELETE")
 
 	// Routing for handling stock_in_progress
-	a.Router.HandleFunc("/api/stock-ins/{id}/progress", a.GetAllProgressStockIns).Methods("GET")
-	a.Router.HandleFunc("/api/stock-ins/{id}/progress", a.CreateProgressStockIns).Methods("POST")
+	a.Router.HandleFunc("/api/stock-ins/{stock_in_id}/progress", a.GetAllProgressStockIns).Methods("GET")
+	a.Router.HandleFunc("/api/stock-ins/{stock_in_id}/progress", a.CreateProgressStockIns).Methods("POST")
 
 	// Routing for handling stock_out
 	a.Router.HandleFunc("/api/stock-outs", a.GetAllStockOuts).Methods("GET")

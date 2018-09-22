@@ -5,6 +5,7 @@ import (
 	// "fmt"
 	// "log"
 	"net/http"
+	"strconv"
 
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
@@ -67,10 +68,14 @@ func CreateStockIns(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 
 // handler for delete data stockins by id
 func DeleteStockIns(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r) // get parameter
+	vars := mux.Vars(r) // get parameter url
+	stock_in_id, err := strconv.Atoi(vars["stock_in_id"])
+	if err != nil {
+		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
 
-	id := vars["ID"]                          // get id
-	stockin := GetStockinsOr404(db, id, w, r) // make sure record is exist
+	stockin := GetStockinsOr404(db, stock_in_id, w, r) // make sure record is exist
 	if stockin == nil {
 		return // record not found
 	}
@@ -84,10 +89,14 @@ func DeleteStockIns(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateStockIns(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r) // get parameter
+	vars := mux.Vars(r) // get parameter url
+	stock_in_id, err := strconv.Atoi(vars["stock_in_id"])
+	if err != nil {
+		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
 
-	id := vars["ID"]                          // get id
-	stockin := GetStockinsOr404(db, id, w, r) // make sure record is exist
+	stockin := GetStockinsOr404(db, stock_in_id, w, r) // make sure record is exist
 	if stockin == nil {
 		return // record not found
 	}
@@ -108,11 +117,11 @@ func UpdateStockIns(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 }
 
 // getStockinsOr404 gets a stockin instance if exists, or respond the 404 error otherwise
-func GetStockinsOr404(db *gorm.DB, id string, w http.ResponseWriter, r *http.Request) *model.StockIn {
+func GetStockinsOr404(db *gorm.DB, id int, w http.ResponseWriter, r *http.Request) *model.StockIn {
 	stockin := model.StockIn{}
 
 	if err := db.Preload("Product").First(&stockin, id).Error; err != nil { // Get record with primary key (only works for integer primary key)
-		respondWithError(w, http.StatusNotFound, err.Error()) // print record not found
+		respondWithError(w, http.StatusNotFound, "Record stock in not found") // print record not found
 		return nil
 	}
 	return &stockin

@@ -6,3 +6,5 @@ import:
   - dialects/sqlite
 - package: github.com/gorilla/mux
   version: v1.6.2
+- package: gopkg.in/go-playground/validator.v9
+  version: v9.21.0

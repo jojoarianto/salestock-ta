@@ -1,10 +1,24 @@
-hash: 40459370ead97df6b810fa3c0337dff4abb1e950ca4b9de586f6a65e909ee38f
-updated: 2018-09-21T06:25:08.761406+07:00
+hash: 92ddc507215a1b121a78a27696a6fbc3ffb003142b510d8e5db67e42a8531dec
+updated: 2018-09-23T02:33:49.586205+07:00
 imports:
+- name: github.com/go-playground/locales
+  version: f63010822830b6fe52288ee52d5a1151088ce039
+  subpackages:
+  - currency
+- name: github.com/go-playground/universal-translator
+  version: 71201497bace774495daed26a3874fd339e0b538
+- name: github.com/gorilla/context
+  version: 08b5f424b9271eedf6f9f0ce86cb9396ed337a42
 - name: github.com/gorilla/mux
   version: e3702bed27f0d39777b0b37b664b6280e8ef8fbf
 - name: github.com/jinzhu/gorm
   version: 6ed508ec6a4ecb3531899a69cbc746ccf65a4166
   subpackages:
   - dialects/sqlite
+- name: github.com/jinzhu/inflection
+  version: 04140366298a54a039076d798123ffa108fff46c
+- name: github.com/mattn/go-sqlite3
+  version: 6de94b0b99071c779a0a8d4072b65d95c42c12d6
+- name: gopkg.in/go-playground/validator.v9
+  version: e69e9a28bb62b977fdc58d051f1bb477b7cbe486
 testImports: []

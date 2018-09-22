@@ -29,7 +29,51 @@
 
 ## Usage
 
-GET `/api/stock-in` with this json
+POST `/api/products` with json
+```json
+{
+    "sku": "SSI-D00791015-LL-BWH",
+    "name": "Zalekia Plain Casual Blouse (L,Broken White)"
+}
+```
+
+POST `/api/stock-ins/3/progress` with json
+```json
+{
+    "stock_in_progress_time":"2018-09-21T14:42:49.77869956+07:00",
+    "qty":1
+}
+```
+
+POST `/api/stock-ins` with json
+```json
+{
+	"transaction_time":"2018-09-21T14:42:49.77869956+07:00",
+	"product_id":1,
+	"order_qty":100,
+	"received_qty":0,
+	"purchase_price":1000,
+	"total_price":1000000,
+	"receipt":"ASP"
+}
+```
+
+POST `/api/stock-out` with json
+```json
+{
+    "transaction_time":"2018-09-21T14:42:49.77869956+07:00",
+    "product_id":1,
+    "out_qty":1,
+    "sell_price":100,
+    "total_price":1000,
+    "transaction_id":"testing",
+    "status_out_code":1
+}
+```
+
+## Response
+
+GET all stock in `/api/stock-in`
 ```json
 [
     {
@@ -76,66 +120,6 @@ GET `/api/stock-in` with this json
     },
     ...
 ]
-```
-
-Post `/api/products` with this json
-```json
-{
-	"sku": "SSI-D00791015-LL-BWH",
-	"name": "Zalekia Plain Casual Blouse (L,Broken White)"
-}
-```
-
-Post `/api/stock-ins` with this json
-```json
-{
-	"transaction_time":"2018-09-21T14:42:49.77869956+07:00",
-	"product_id":1,
-	"order_qty":100,
-	"received_qty":0,
-	"purchase_price":1000,
-	"total_price":1000000,
-	"receipt":"ASP"
-}
-```
-
-Post `/api/stock-ins` Response
-```json
-{
-    "ID": 1,
-    "CreatedAt": "2018-09-22T03:40:31.544120826+07:00",
-    "UpdatedAt": "2018-09-22T03:40:31.544120826+07:00",
-    "DeletedAt": null,
-    "transaction_time": "2018-09-21T14:42:49.77869956+07:00",
-    "product_id": 1,
-    "Product": {
-        "ID": 1,
-        "CreatedAt": "2018-09-22T03:36:48.762505285+07:00",
-        "UpdatedAt": "2018-09-22T03:40:31.536253105+07:00",
-        "DeletedAt": null,
-        "sku": "SSI-D00791015-LL-BWH",
-        "name": "Zalekia Plain Casual Blouse (L,Broken White)",
-        "stocks": 0
-    },
-    "order_qty": 100,
-    "received_qty": 0,
-    "purchase_price": 1000,
-    "total_price": 100000,
-    "receipt": "IRIANTO-99-NEW-99"
-}
-```
-
-Post `/api/stock-out` with this json
-```json
-{
-    "transaction_time":"2018-09-21T14:42:49.77869956+07:00",
-    "product_id":1,
-    "out_qty":1,
-    "sell_price":100,
-    "total_price":1000,
-    "transaction_id":"testing",
-    "status_out_code":1
-}
 ```
 
 ## Note

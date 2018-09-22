@@ -9,7 +9,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
-	"gopkg.in/go-playground/validator.v9" // for validation
+	"gopkg.in/go-playground/validator.v9"
 	"salestock-ta/app/model"
 )
 
@@ -83,8 +83,8 @@ func CreateProgressStockIns(db *gorm.DB, w http.ResponseWriter, r *http.Request)
 	}
 
 	// 2. Update stock_in quantity received
-	// 3. Update stockin stock in status code (When order_qty == purchase_price)
 	stockin.ReceivedQty = stockin.ReceivedQty + progress.Qty
+	// 3. Update stockin stock in status code (When order_qty == purchase_price)
 	if stockin.ReceivedQty >= stockin.OrderQty {
 		stockin.StausInCode = 1
 	}

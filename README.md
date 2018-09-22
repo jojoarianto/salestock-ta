@@ -24,6 +24,7 @@
 * `PUT` : Update a stock in
 
 #### /api/stock-ins/:id/progress
+* `GET` : Get a all progress stock in by id stock in 
 * `POST` : Create a stock in progress
 
 ## Usage

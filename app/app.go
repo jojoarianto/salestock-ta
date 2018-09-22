@@ -44,8 +44,12 @@ func (a *App) setRouters() {
 	a.Router.HandleFunc("/api/stock-ins", a.GetAllStockIns).Methods("GET")
 	a.Router.HandleFunc("/api/stock-ins/{id}", a.GetStockIn).Methods("GET")
 	a.Router.HandleFunc("/api/stock-ins", a.CreateStockIns).Methods("POST")
-	a.Router.HandleFunc("/api/stock-ins", a.UpdateStockIns).Methods("PUT")
-	a.Router.HandleFunc("/api/stock-ins", a.DeleteStockIns).Methods("DELETE")
+	a.Router.HandleFunc("/api/stock-ins/{id}", a.UpdateStockIns).Methods("PUT")
+	a.Router.HandleFunc("/api/stock-ins/{id}", a.DeleteStockIns).Methods("DELETE")
+
+	// Routing for handling stock_in_progress
+	a.Router.HandleFunc("/api/stock-ins/{id}/progress", a.GetAllProgressStockIns).Methods("GET")
+	a.Router.HandleFunc("/api/stock-ins/{id}/progress", a.CreateProgressStockIns).Methods("POST")
 }
 
 // handler for get all product
@@ -63,7 +67,7 @@ func (a *App) GetAllStockIns(w http.ResponseWriter, r *http.Request) {
 	handler.GetAllStockIns(a.DB, w, r)
 }
 
-// handler for get all stock in
+// handler for get single stock in
 func (a *App) GetStockIn(w http.ResponseWriter, r *http.Request) {
 	handler.GetStockIn(a.DB, w, r)
 }
@@ -81,6 +85,16 @@ func (a *App) UpdateStockIns(w http.ResponseWriter, r *http.Request) {
 // handler for delete stock_in
 func (a *App) DeleteStockIns(w http.ResponseWriter, r *http.Request) {
 	handler.DeleteStockIns(a.DB, w, r)
+}
+
+// handler for get all [rpgress] stock in
+func (a *App) GetAllProgressStockIns(w http.ResponseWriter, r *http.Request) {
+	handler.GetAllProgressStockIns(a.DB, w, r)
+}
+
+// handler for create a single progress stock in
+func (a *App) CreateProgressStockIns(w http.ResponseWriter, r *http.Request) {
+	handler.CreateProgressStockIns(a.DB, w, r)
 }
 
 // Run the app on it's router

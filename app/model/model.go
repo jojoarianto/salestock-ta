@@ -18,22 +18,22 @@ type Product struct {
 // Note : Gorm not work foreignkey with sqlite (https://github.com/jinzhu/gorm/issues/635)
 // Data structure for stock_in
 type StockIn struct {
-	gorm.Model              // add fields `ID`, `CreatedAt`, `UpdatedAt`, `DeletedAt`
-	StockInTime   time.Time `json:"stock_in_time"`
-	ProductID     uint      `json:"product_id" sql:"type:integer REFERENCES products(id) ON DELETE CASCADE ON UPDATE CASCADE"` // belongs to product
-	Product       Product   //`gorm:"foreignkey:ProductID"`                                                                      // belongs to product
-	OrderQty      int       `json:"order_qty"`
-	ReceivedQty   int       `json:"received_qty"`
-	PurchasePrice int       `json:"purchase_price"`
-	TotalPrice    int       `json:"total_price"`
-	Receipt       string    `json:"receipt"`
-	Progress      []StockInProgress
+	gorm.Model                      // add fields `ID`, `CreatedAt`, `UpdatedAt`, `DeletedAt`
+	StockInTime   time.Time         `json:"stock_in_time"`
+	ProductID     int               `json:"product_id" sql:"type:integer REFERENCES products(id) ON DELETE CASCADE ON UPDATE CASCADE"` // belongs to product
+	Product       Product           //`gorm:"foreignkey:ProductID"`                                                                      // belongs to product
+	OrderQty      int               `json:"order_qty"`
+	ReceivedQty   int               `json:"received_qty"`
+	PurchasePrice int               `json:"purchase_price"`
+	TotalPrice    int               `json:"total_price"`
+	Receipt       string            `json:"receipt"`
+	Progress      []StockInProgress `gorm:"ForeignKey:StockInsID"`
 }
 
 // Data structure for stock_in_progress
 type StockInProgress struct {
 	gorm.Model               // add fields `ID`, `CreatedAt`, `UpdatedAt`, `DeletedAt`
 	ProgressInTime time.Time `json:"stock_in_progress_time"`
-	StockInsID     uint      `json:"stock_in" sql:"type:integer REFERENCES stock_ins(id) ON DELETE CASCADE ON UPDATE CASCADE"` // belongs to stock in
+	StockInsID     int       `json:"stock_ins_id" sql:"type:integer REFERENCES stock_ins(id) ON DELETE CASCADE ON UPDATE CASCADE"` // belongs to stock in
 	Qty            int       `json:"qty"`
 }

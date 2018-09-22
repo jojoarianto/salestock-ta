@@ -3,6 +3,7 @@ package handler
 import (
 	"encoding/json"
 	// "fmt"
+	// "log"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -14,20 +15,21 @@ import (
 func GetAllStockIns(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	stockin := []model.StockIn{}
 
-	db.Preload("Product").Find(&stockin)
+	db.Preload("Progress").Preload("Product").Find(&stockin)
 	respondWithJson(w, http.StatusOK, stockin)
 }
 
-// handler for get single ddata stockin
+// handler for get single data stockin
 func GetStockIn(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r) // get parameter url
 	id := vars["id"]
 
 	stockin := model.StockIn{}
-	if err := db.Preload("Product").Find(&stockin, id).Error; err != nil {
+	if err := db.Preload("Progress").Preload("Product").Find(&stockin, id).Error; err != nil {
 		respondWithError(w, http.StatusNotFound, err.Error())
 		return
 	}
+
 	respondWithJson(w, http.StatusOK, stockin)
 }
 
@@ -67,7 +69,7 @@ func DeleteStockIns(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r) // get parameter
 
 	id := vars["ID"]                          // get id
-	stockin := getStockinsOr404(db, id, w, r) // make sure record is exist
+	stockin := GetStockinsOr404(db, id, w, r) // make sure record is exist
 	if stockin == nil {
 		return // record not found
 	}
@@ -84,7 +86,7 @@ func UpdateStockIns(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r) // get parameter
 
 	id := vars["ID"]                          // get id
-	stockin := getStockinsOr404(db, id, w, r) // make sure record is exist
+	stockin := GetStockinsOr404(db, id, w, r) // make sure record is exist
 	if stockin == nil {
 		return // record not found
 	}
@@ -105,10 +107,10 @@ func UpdateStockIns(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 }
 
 // getStockinsOr404 gets a stockin instance if exists, or respond the 404 error otherwise
-func getStockinsOr404(db *gorm.DB, id string, w http.ResponseWriter, r *http.Request) *model.StockIn {
+func GetStockinsOr404(db *gorm.DB, id string, w http.ResponseWriter, r *http.Request) *model.StockIn {
 	stockin := model.StockIn{}
 
-	if err := db.First(&stockin, id).Error; err != nil { // Get record with primary key (only works for integer primary key)
+	if err := db.Preload("Product").First(&stockin, id).Error; err != nil { // Get record with primary key (only works for integer primary key)
 		respondWithError(w, http.StatusNotFound, err.Error()) // print record not found
 		return nil
 	}

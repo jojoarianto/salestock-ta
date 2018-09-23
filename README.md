@@ -4,10 +4,6 @@ This is Salestock backend technical assessment. Salestock give me a study case w
 
 Toko Ijah want to replace her spreadsheet by creating an application.   So, goal of this project is to provide REST API for toko ijah inventory application.
 
-## Feature
-* `Barang Masuk` Process of entering stock in (Barang masuk) can be done in stages (Progress Stock In)
-* `Barang Keluar` When stock not enough, the system will give rejection
-
 ## Installation & Run
 
 ```bash
@@ -27,6 +23,70 @@ go build
 
 # API Endpoint : http://127.0.0.1:8000
 ```
+## Library & Dependency
+Project library : 
+* Github.com/gorilla/mux
+* Github.com/jinzhu/gorm
+* Github.com/jinzhu/gorm/dialects/sqlite
+* Gopkg.in/go-playground/validator.v9
+
+## Model Data
+Products (Barang)
+```go 
+type Product struct {
+    gorm.Model
+    Sku    string
+    Name   string 
+    Stocks int
+}
+```
+
+Stock Ins (Barang Masuk)
+```go
+type StockIn struct {
+    gorm.Model
+    StockInTime   time.Time
+    ProductID     int
+    Product       Product 
+    OrderQty      int 
+    ReceivedQty   int 
+    PurchasePrice int 
+    TotalPrice    int 
+    Receipt       string 
+    Progress      []StockInProgress 
+    StausInCode   int // 0. waiting, 1 completed
+}
+```
+Stock In Progress (Progress Barang Masuk)
+```go
+type StockInProgress struct { 
+    gorm.Model
+    ProgressInTime time.Time
+    StockInsID     int
+    Qty            int 
+}
+```
+Stock Outs (Barang Keluar)
+```go
+type StockOut struct { 
+    gorm.Model
+    StockOutTime  time.Time
+    ProductID     int 
+    Product       Product 
+    OutQty        int
+    SellPrice     int 
+    TotalPrice    int 
+    Transaction   string // transaction null jika barang tidak terjual
+    StatusOutCode int // 1. Terjual, 2. Barang Hilang, 3. Barang Rusak, 4 Barang Sample
+}
+```
+
+
+## Features
+* `Barang Masuk` Process of entering stock in (Barang masuk) can be done in stages (Progress Stock In)
+* `Barang Keluar` When stock not enough, the system will give rejection and rollback the insertion
+* `Import Barang` by using csv file
+
 
 ## Product Items Backlog
  - [X] **Mandotory:** create REST API to replace inventory spreadsheet
@@ -240,5 +300,3 @@ ID Pesanan,Waktu,SKU,Nama Barang,Jumlah,Harga Jual,Total,Harga Beli,Laba
 20180109-853724,2018-01-01 14:42:49,SSI-D00791015-LL-BWH,"Zalekia Plain Casual Blouse (L,Broken White)",2,100000,200000,77000,46000
 ```
 
-## Note
-README will update soon

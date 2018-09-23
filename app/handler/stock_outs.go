@@ -54,12 +54,6 @@ func CreateStockOuts(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-	validate := validator.New() // validation
-	if err := validate.Struct(stockout); err != nil {
-		respondWithError(w, http.StatusBadRequest, err.Error())
-		return
-	}
-
 	// validasi product, make sure product is exist
 	product := model.Product{}
 	if err := db.First(&product, stockout.ProductID).Error; err != nil {
@@ -68,6 +62,12 @@ func CreateStockOuts(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	}
 
 	stockout.Product = product
+
+	validate := validator.New() // validation
+	if err := validate.Struct(stockout); err != nil {
+		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
 
 	//====== BEGIN TRANSACTION ========//
 

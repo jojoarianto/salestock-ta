@@ -10,8 +10,8 @@ import (
 // Data structure for product
 type Product struct { // BARANG
 	gorm.Model
-	Sku    string `gorm:"type:varchar(100);unique_index" json:"sku"`
-	Name   string `json:"name"`
+	Sku    string `validate:"required" gorm:"type:varchar(100);unique_index" json:"sku"`
+	Name   string `validate:"required" json:"name"`
 	Stocks int    `json:"stocks"`
 }
 

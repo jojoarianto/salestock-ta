@@ -12,6 +12,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
+	"gopkg.in/go-playground/validator.v9"
 	"salestock-ta/app/model"
 )
 
@@ -32,6 +33,12 @@ func CreateProduct(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer r.Body.Close()
+
+	validate := validator.New() // validation
+	if err := validate.Struct(product); err != nil {
+		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
 
 	if err := db.Save(&product).Error; err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())
@@ -55,6 +62,26 @@ func UpdateProduct(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	if product == nil {
 		return
 	}
+
+	decoder := json.NewDecoder(r.Body)
+	if err := decoder.Decode(&product); err != nil {
+		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+	defer r.Body.Close()
+
+	validate := validator.New() // validation
+	if err := validate.Struct(product); err != nil {
+		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	if err := db.Save(&product).Error; err != nil {
+		respondWithError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	respondWithJson(w, http.StatusOK, product)
 }
 
 // delete a product

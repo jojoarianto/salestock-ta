@@ -4,10 +4,25 @@ This is Salestock backend technical assessment. Salestock give me a study case w
 
 Toko Ijah want to replace her spreadsheet by creating an application.   So, goal of this project is to provide REST API for toko ijah inventory application.
 
-
 ## Feature
 * `Barang Masuk` Process of entering stock in (Barang masuk) can be done in stages (Progress Stock In)
 * `Barang Keluar` When stock not enough, the system will give rejection
+
+## Installation & Run
+
+```bash
+# Download this project
+go get github.com/jojoarianto/salestock-ta
+```
+
+```bash
+# Build and Run
+cd salestock-ta
+go build
+./salestock-ta
+
+# API Endpoint : http://127.0.0.1:8000
+```
 
 ## API
 
@@ -128,7 +143,7 @@ GET all stock in `/api/stock-in`
          - [X] Get all
          - [ ] Get by id 
          - [X] Create 
-         - [ ] Update 
+         - [X] Update 
          - [X] Delete
      - [X] Stock In (Barang Masuk)
          - [X] Get all
@@ -150,7 +165,7 @@ GET all stock in `/api/stock-in`
  - [X] **Mandotory:** export data report in csv format
      - [X] Stock (Catatan Jumlah Barang)
      - [ ] Stock in (Catatan Barang Masuk)
-     - [ ] Stock out (Catatan Barang Keluar)
+     - [X] Stock out (Catatan Barang Keluar)
      - [ ] Report value of product (Laporan Nilai Barang)
      - [ ] Sales report (Laporan Penjualan)
  - [ ] Optional : import data from csv/spreadsheet Toko Ijah (data migration)

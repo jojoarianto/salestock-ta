@@ -56,6 +56,9 @@ func (a *App) setRouters() {
 	// Routing for handling stock_out
 	a.Router.HandleFunc("/api/stock-outs", a.GetAllStockOuts).Methods("GET")
 	a.Router.HandleFunc("/api/stock-outs", a.CreateStockOuts).Methods("POST")
+
+	// Routing for export csv handling
+	a.Router.HandleFunc("/export/products", a.ExportCsvProducts).Methods("GET")
 }
 
 // =============================
@@ -137,6 +140,14 @@ func (a *App) GetAllStockOuts(w http.ResponseWriter, r *http.Request) {
 // handler for create stock_out
 func (a *App) CreateStockOuts(w http.ResponseWriter, r *http.Request) {
 	handler.CreateStockOuts(a.DB, w, r)
+}
+
+// =============================
+//    EXPORT CSV
+// =============================
+
+func (a *App) ExportCsvProducts(w http.ResponseWriter, r *http.Request) {
+	handler.ExportCsvProducts(a.DB, w, r)
 }
 
 // Run the app on it's router

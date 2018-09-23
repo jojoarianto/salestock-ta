@@ -21,7 +21,6 @@ func GetAllStockOuts(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 
 // handler for create a single stock out
 func CreateStockOuts(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
-	log.Println("Barang Keluar")
 	stockout := model.StockOut{}
 
 	decoder := json.NewDecoder(r.Body)

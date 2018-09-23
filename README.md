@@ -126,10 +126,10 @@ GET all stock in `/api/stock-in`
  - [X] **Mandotory:** create REST API to replace inventory spreadsheet
      - [X] Product (Barang)
          - [X] Get all
-         - [X] Get by id 
+         - [ ] Get by id 
          - [X] Create 
          - [ ] Update 
-         - [ ] Delete
+         - [X] Delete
      - [X] Stock In (Barang Masuk)
          - [X] Get all
          - [X] Get by id
@@ -147,12 +147,12 @@ GET all stock in `/api/stock-in`
          - [X] Create
          - [ ] Update
          - [ ] Delete 
- - [ ] **Mandotory:** export data report in csv format
-     - [ ] Stock report
-     - [ ] Stock in report
-     - [ ] Stock out report
-     - [ ] Product valuation
-     - [ ] Sales report
+ - [X] **Mandotory:** export data report in csv format
+     - [X] Stock (Catatan Jumlah Barang)
+     - [ ] Stock in (Catatan Barang Masuk)
+     - [ ] Stock out (Catatan Barang Keluar)
+     - [ ] Report value of product (Laporan Nilai Barang)
+     - [ ] Sales report (Laporan Penjualan)
  - [ ] Optional : import data from csv/spreadsheet Toko Ijah (data migration)
      - [ ] Import product
      - [ ] import stock in

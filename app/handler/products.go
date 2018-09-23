@@ -3,8 +3,10 @@ package handler
 import (
 	// "fmt"
 	// "log"
+	"encoding/csv"
 	"encoding/json"
 	"net/http"
+	"os"
 	"strconv"
 
 	"github.com/gorilla/mux"
@@ -84,4 +86,35 @@ func GetProductOr404(db *gorm.DB, product_id int, w http.ResponseWriter, r *http
 		respondWithError(w, http.StatusNotFound, err.Error())
 	}
 	return &product
+}
+
+func ExportCsvProducts(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
+	products := []model.Product{}
+	db.Find(&products)
+	respondWithJson(w, http.StatusOK, products)
+
+	csvData, err := os.Create("csv/export_products.csv")
+	if err != nil {
+		respondWithError(w, http.StatusOK, err.Error())
+	}
+	defer csvData.Close()
+
+	writer := csv.NewWriter(csvData)
+
+	var record []string
+	record = append(record, "SKU")
+	record = append(record, "Nama Item")
+	record = append(record, "Jumlah Sekarang")
+	writer.Write(record)
+
+	for _, worker := range products {
+		var record []string
+		record = append(record, worker.Sku)
+		record = append(record, worker.Name)
+		record = append(record, strconv.Itoa(worker.Stocks))
+		writer.Write(record)
+	}
+	writer.Flush()
+
+	respondWithJson(w, http.StatusOK, "Export products to csv success")
 }

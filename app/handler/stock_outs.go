@@ -1,9 +1,13 @@
 package handler
 
 import (
+	"encoding/csv"
 	"encoding/json"
 	// "log"
 	"net/http"
+	"os"
+	"strconv"
+	// "io"
 
 	// "github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
@@ -89,4 +93,55 @@ func CreateStockOuts(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	//====== END OF TRANSACTION ========//
 
 	respondWithJson(w, http.StatusCreated, stockout)
+}
+
+func ExportCsvStockOuts(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
+	stockout := []model.StockOut{}
+	db.Preload("Product").Find(&stockout)
+
+	csvData, err := os.Create("csv/export_stock_outs.csv")
+	if err != nil {
+		respondWithError(w, http.StatusOK, err.Error())
+	}
+	defer csvData.Close()
+
+	writer := csv.NewWriter(csvData)
+
+	var record []string
+	record = append(record, "Waktu")
+	record = append(record, "SKU")
+	record = append(record, "Nama Barang")
+	record = append(record, "Jumlah Keluar")
+	record = append(record, "Harga Jual")
+	record = append(record, "Total")
+	record = append(record, "Catatan")
+	writer.Write(record)
+
+	for _, worker := range stockout {
+		var record []string
+		record = append(record, worker.StockOutTime.String())
+		record = append(record, worker.Product.Sku)
+		record = append(record, worker.Product.Name)
+		record = append(record, strconv.Itoa(worker.OutQty))
+		record = append(record, strconv.Itoa(worker.SellPrice))
+		record = append(record, strconv.Itoa(worker.TotalPrice))
+
+		switch code := worker.StausOutCode; code {
+		case 1: // terjual
+			str := "Pesanan ID-" + worker.Transaction
+			record = append(record, str)
+		case 2:
+			record = append(record, "Barang Hilang")
+		case 3:
+			record = append(record, "Barang Rusak")
+		case 4:
+			record = append(record, "Barang Rusak")
+		default:
+			record = append(record, "")
+		}
+		writer.Write(record)
+	}
+	writer.Flush()
+
+	respondWithJson(w, http.StatusOK, "Export stock out to csv success check your export file at csv/export_stock_outs.csv")
 }

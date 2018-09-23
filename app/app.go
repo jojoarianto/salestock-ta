@@ -60,7 +60,9 @@ func (a *App) setRouters() {
 	// Routing for export csv handling
 	a.Router.HandleFunc("/export/products", a.ExportCsvProducts).Methods("GET")
 	a.Router.HandleFunc("/export/stock-ins", a.ExportCsvStockIns).Methods("GET")
+	a.Router.HandleFunc("/export/stock-outs", a.ExportCsvStockOuts).Methods("GET")
 
+	// Routing for migration
 	a.Router.HandleFunc("/import/products", a.ImportCsvProducts).Methods("GET")
 }
 
@@ -157,10 +159,15 @@ func (a *App) ExportCsvStockIns(w http.ResponseWriter, r *http.Request) {
 	handler.ExportCsvStockIns(a.DB, w, r)
 }
 
+func (a *App) ExportCsvStockOuts(w http.ResponseWriter, r *http.Request) {
+	handler.ExportCsvStockOuts(a.DB, w, r)
+}
+
 // =============================
 //    IMPORT CSV
 // =============================
 
+//  handler for migrate data product
 func (a *App) ImportCsvProducts(w http.ResponseWriter, r *http.Request) {
 	handler.ImportCsvProducts(a.DB, w, r)
 }

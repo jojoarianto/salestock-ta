@@ -49,5 +49,5 @@ type StockOut struct { // BARANG KELUAR
 	SellPrice    int       `validate:"omitempty,numeric" json:"sell_price"`
 	TotalPrice   int       `json:"total_price"`
 	Transaction  string    `json:"transaction_id"`                                    // transaction null if barang tidak terjual
-	StausOutCode int       `validate:"required,numeric,min=1" json:"status_out_code"` // 1. Terjual, 2. Barang Hilang, 3. Rusak, 4 Barang Sample
+	StausOutCode int       `validate:"required,numeric,min=1" json:"status_out_code"` // 1. Terjual, 2. Barang Hilang, 3. Barang Rusak, 4 Barang Sample
 }

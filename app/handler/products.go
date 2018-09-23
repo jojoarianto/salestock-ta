@@ -92,7 +92,6 @@ func GetProductOr404(db *gorm.DB, product_id int, w http.ResponseWriter, r *http
 func ExportCsvProducts(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	products := []model.Product{}
 	db.Find(&products)
-	respondWithJson(w, http.StatusOK, products)
 
 	csvData, err := os.Create("csv/export_products.csv")
 	if err != nil {
@@ -117,7 +116,7 @@ func ExportCsvProducts(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	}
 	writer.Flush()
 
-	respondWithJson(w, http.StatusOK, "Export products to csv success")
+	respondWithJson(w, http.StatusOK, "Export products to csv success check your export file at csv/export_products.csv")
 }
 
 // handler function to import products
@@ -149,6 +148,5 @@ func ImportCsvProducts(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 
 	db.Exec(sqlStr)
 	peopleJson, _ := json.Marshal(product)
-	// fmt.Println(string(peopleJson))
 	respondWithJson(w, http.StatusOK, string(peopleJson))
 }

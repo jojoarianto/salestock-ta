@@ -12,6 +12,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
+	"gopkg.in/go-playground/validator.v9"
 	"salestock-ta/app/model"
 )
 
@@ -48,15 +49,20 @@ func CreateStockIns(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-	// search the product first
-	vars := mux.Vars(r)
-	product_id := vars["product_id"]
+	product_id := stockin.ProductID
+
 	product := model.Product{}
 	if err := db.First(&product, product_id).Error; err != nil {
 		respondWithError(w, http.StatusNotFound, err.Error()) // print record not found
 		return
 	}
 	stockin.Product = product
+
+	validate := validator.New() // validation
+	if err := validate.Struct(stockin); err != nil {
+		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
 
 	// count total price
 	stockin.TotalPrice = stockin.PurchasePrice * stockin.OrderQty

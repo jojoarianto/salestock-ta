@@ -42,11 +42,7 @@ func CreateProgressStockIns(db *gorm.DB, w http.ResponseWriter, r *http.Request)
 		return // record not found
 	}
 
-	//====== BEGIN TRANSACTION
-	// 1. Create progress_stock_in
-	// 2. Update stock_in quantity received
-	// 3. Update stockin stock in status code (When order_qty == purchase_price)
-	// 4. Update stock on product
+	//====== BEGIN TRANSACTION ========//
 
 	tx := db.Begin()
 	defer func() {
@@ -77,18 +73,19 @@ func CreateProgressStockIns(db *gorm.DB, w http.ResponseWriter, r *http.Request)
 	}
 
 	// 1. Create progress_stock_in
-	if err := db.Create(&progress).Error; err != nil {
+	if err := tx.Create(&progress).Error; err != nil {
 		tx.Rollback()
 		return
 	}
 
 	// 2. Update stock_in quantity received
 	stockin.ReceivedQty = stockin.ReceivedQty + progress.Qty
+
 	// 3. Update stockin stock in status code (When order_qty == purchase_price)
 	if stockin.ReceivedQty >= stockin.OrderQty {
 		stockin.StausInCode = 1
 	}
-	if err := db.Save(&stockin).Error; err != nil {
+	if err := tx.Save(&stockin).Error; err != nil {
 		tx.Rollback()
 		return
 	}
@@ -96,16 +93,18 @@ func CreateProgressStockIns(db *gorm.DB, w http.ResponseWriter, r *http.Request)
 	// 4. Update stock on product
 	product := stockin.Product
 	product.Stocks = product.Stocks + progress.Qty
-	if err := db.Save(&product).Error; err != nil {
+	if err := tx.Save(&product).Error; err != nil {
 		tx.Rollback()
 		return
 	}
+	stockin.Product = product
 
 	if err := tx.Commit().Error; err != nil {
 		respondWithError(w, http.StatusInternalServerError, "Error Transaction")
 		return
 	}
-	//====== END TRANSACTION
+
+	//====== END OF TRANSACTION ========//
 
 	respondWithJson(w, http.StatusOK, &stockin)
 }

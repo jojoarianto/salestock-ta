@@ -22,9 +22,9 @@ type StockIn struct { // BARANG MASUK
 	StockInTime   time.Time         `json:"stock_in_time"`
 	ProductID     int               `json:"product_id" sql:"type:integer REFERENCES products(id) ON DELETE CASCADE ON UPDATE CASCADE"` // belongs to product
 	Product       Product           `json:"product"`
-	OrderQty      int               `json:"order_qty"`
+	OrderQty      int               `validate:"required,min=1" json:"order_qty"`
 	ReceivedQty   int               `json:"received_qty"`
-	PurchasePrice int               `json:"purchase_price"`
+	PurchasePrice int               `validate:"required,min=1" json:"purchase_price"`
 	TotalPrice    int               `json:"total_price"`
 	Receipt       string            `json:"receipt"`
 	Progress      []StockInProgress `gorm:"ForeignKey:StockInsID" json:"progress"`

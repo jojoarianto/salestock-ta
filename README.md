@@ -168,8 +168,8 @@ GET all stock in `/api/stock-in`
      - [X] Stock out (Catatan Barang Keluar)
      - [ ] Report value of product (Laporan Nilai Barang)
      - [ ] Sales report (Laporan Penjualan)
- - [ ] Optional : import data from csv/spreadsheet Toko Ijah (data migration)
-     - [ ] Import product
+ - [X] Optional : import data from csv/spreadsheet Toko Ijah (data migration)
+     - [X] Import product
      - [ ] import stock in
      - [ ] Import stock out
  - [ ] Optional : CMS UI for inventory management

@@ -5,6 +5,7 @@ import (
 	// "io"
 	"encoding/csv"
 	"encoding/json"
+	// "fmt"
 	"net/http"
 	"os"
 	"strconv"
@@ -146,7 +147,7 @@ func ExportCsvStockOuts(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 		record = append(record, strconv.Itoa(worker.SellPrice))
 		record = append(record, strconv.Itoa(worker.TotalPrice))
 
-		switch code := worker.StausOutCode; code {
+		switch code := worker.StatusOutCode; code {
 		case 1: // terjual
 			str := "Pesanan ID-" + worker.Transaction
 			record = append(record, str)
@@ -164,4 +165,72 @@ func ExportCsvStockOuts(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	writer.Flush()
 
 	respondWithJson(w, http.StatusOK, "Export stock out to csv success check your export file at csv/export_stock_outs.csv")
+}
+
+// handler for export sales report
+func ExportCsvSalesReport(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
+	type HargaBeli struct {
+		ProductID int
+		Qty       int
+		Total     int
+	}
+
+	// query get totoal received & total price
+	query := "select stock_ins.product_id as product_id, SUM(stock_ins.order_qty) as qty, SUM(stock_ins.total_price) as total from stock_ins GROUP BY stock_ins.product_id;"
+
+	var hargabeli []HargaBeli
+	db.Raw(query).Scan(&hargabeli)
+	HargaBeliBarang := make(map[int]int)
+	for _, w := range hargabeli {
+		HargaBeliBarang[w.ProductID] = w.Total / w.Qty
+	}
+
+	stockout := []model.StockOut{}
+	db.Preload("Product").Where("status_out_code = ?", 1).Find(&stockout)
+
+	csvData, err := os.Create("csv/export_sales_report.csv")
+	if err != nil {
+		respondWithError(w, http.StatusOK, err.Error())
+	}
+	defer csvData.Close()
+
+	writer := csv.NewWriter(csvData)
+
+	var record []string
+	record = append(record, "ID Pesanan")
+	record = append(record, "Waktu")
+	record = append(record, "SKU")
+	record = append(record, "Nama Barang")
+	record = append(record, "Jumlah")
+	record = append(record, "Harga Jual")
+	record = append(record, "Total")
+	record = append(record, "Harga Beli")
+	record = append(record, "Laba")
+	writer.Write(record)
+
+	for _, worker := range stockout {
+		var record []string
+		record = append(record, worker.Transaction)
+		record = append(record, worker.StockOutTime.Format("2006-01-02 15:04:05"))
+		record = append(record, worker.Product.Sku)
+		record = append(record, worker.Product.Name)
+		record = append(record, strconv.Itoa(worker.OutQty))
+		record = append(record, strconv.Itoa(worker.SellPrice))
+		record = append(record, strconv.Itoa(worker.TotalPrice))
+
+		if beli, ok := HargaBeliBarang[worker.ProductID]; ok {
+			record = append(record, strconv.Itoa(beli)) // nilai beli rata rata barang
+			// laba = total - (harga beli x jumlah)
+			laba := worker.TotalPrice - (beli * worker.OutQty)
+			record = append(record, strconv.Itoa(laba))
+		} else {
+			record = append(record, "0") // if empty stock
+			record = append(record, "0")
+		}
+
+		writer.Write(record)
+	}
+	writer.Flush()
+
+	respondWithJson(w, http.StatusOK, "Export sales report to csv success check your export file at csv/export_sales_report.csv")
 }

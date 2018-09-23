@@ -63,6 +63,7 @@ func (a *App) setRouters() {
 	a.Router.HandleFunc("/export/products", a.ExportCsvProducts).Methods("GET")
 	a.Router.HandleFunc("/export/stock-ins", a.ExportCsvStockIns).Methods("GET")
 	a.Router.HandleFunc("/export/stock-outs", a.ExportCsvStockOuts).Methods("GET")
+	a.Router.HandleFunc("/export/sales", a.ExportCsvSalesReport).Methods("GET")
 
 	// Routing for migration
 	a.Router.HandleFunc("/import/products", a.ImportCsvProducts).Methods("GET")
@@ -175,6 +176,10 @@ func (a *App) ExportCsvStockOuts(w http.ResponseWriter, r *http.Request) {
 	handler.ExportCsvStockOuts(a.DB, w, r)
 }
 
+func (a *App) ExportCsvSalesReport(w http.ResponseWriter, r *http.Request) {
+	handler.ExportCsvSalesReport(a.DB, w, r)
+}
+
 // =============================
 //    IMPORT CSV
 // =============================
@@ -186,6 +191,6 @@ func (a *App) ImportCsvProducts(w http.ResponseWriter, r *http.Request) {
 
 // Run the app on it's router
 func (a *App) Run(host string) {
-	log.Printf("Start a server on http://127.0.0.1:%s", host)
+	log.Printf("Start a server on http://127.0.0.1%s", host)
 	log.Fatal(http.ListenAndServe(host, a.Router))
 }

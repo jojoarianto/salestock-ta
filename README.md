@@ -58,7 +58,7 @@ go build
      - [X] Stock in (Catatan Barang Masuk)
      - [X] Stock out (Catatan Barang Keluar)
      - [ ] Report value of product (Laporan Nilai Barang)
-     - [ ] Sales report (Laporan Penjualan)
+     - [X] Sales report (Laporan Penjualan)
  - [X] Optional : import data from csv/spreadsheet Toko Ijah (data migration)
      - [X] Import product
      - [ ] import stock in
@@ -229,6 +229,15 @@ Waktu,SKU,Nama Barang,Jumlah Keluar,Harga Jual,Total,Catatan
 2018/01/01 14:42:49,SSI-D00791015-LL-BWH,"Zalekia Plain Casual Blouse (L,Broken White)",10,130,1300,Pesanan ID-20180101-023993
 2018/01/01 14:42:49,SSI-D00791015-LL-BWH,"Zalekia Plain Casual Blouse (L,Broken White)",100,130,13000,Pesanan ID-20180101-023993
 2018/01/01 14:42:49,SSI-D00791015-LL-BWH,"Zalekia Plain Casual Blouse (L,Broken White)",100,130,13000,Pesanan ID-20180101-023993
+```
+
+Export csv sales report `GET` `/export/sales`
+```csv
+ID Pesanan,Waktu,SKU,Nama Barang,Jumlah,Harga Jual,Total,Harga Beli,Laba
+20180109-853724,2018-01-01 14:42:49,SSI-D00791015-LL-BWH,"Zalekia Plain Casual Blouse (L,Broken White)",1,100000,100000,77000,23000
+20180109-853724,2018-01-01 14:42:49,SSI-D00864652-SS-NAV,"Deklia Plain Casual Blouse (S,Navy)",2,125000,250000,77000,96000
+20180109-853724,2018-01-01 14:42:49,SSI-D00791015-LL-BWH,"Zalekia Plain Casual Blouse (L,Broken White)",1,97000,97000,77000,20000
+20180109-853724,2018-01-01 14:42:49,SSI-D00791015-LL-BWH,"Zalekia Plain Casual Blouse (L,Broken White)",2,100000,200000,77000,46000
 ```
 
 ## Note

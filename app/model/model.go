@@ -42,12 +42,12 @@ type StockInProgress struct { // PROGRESS BARANG MASUK
 // Struct for stock_out
 type StockOut struct { // BARANG KELUAR
 	gorm.Model
-	StockOutTime time.Time `validate:"required" json:"stock_out_time"`
-	ProductID    int       `validate:"required,numeric,min=1" json:"product_id" sql:"type:integer REFERENCES products(id) ON DELETE CASCADE ON UPDATE CASCADE"` // belongs to product
-	Product      Product   `json:"product"`
-	OutQty       int       `validate:"required,numeric" json:"out_qty"`
-	SellPrice    int       `validate:"omitempty,numeric" json:"sell_price"`
-	TotalPrice   int       `json:"total_price"`
-	Transaction  string    `json:"transaction_id"`                                    // transaction null if barang tidak terjual
-	StausOutCode int       `validate:"required,numeric,min=1" json:"status_out_code"` // 1. Terjual, 2. Barang Hilang, 3. Barang Rusak, 4 Barang Sample
+	StockOutTime  time.Time `validate:"required" json:"stock_out_time"`
+	ProductID     int       `validate:"required,numeric,min=1" json:"product_id" sql:"type:integer REFERENCES products(id) ON DELETE CASCADE ON UPDATE CASCADE"` // belongs to product
+	Product       Product   `json:"product"`
+	OutQty        int       `validate:"required,numeric" json:"out_qty"`
+	SellPrice     int       `validate:"omitempty,numeric" json:"sell_price"`
+	TotalPrice    int       `json:"total_price"`
+	Transaction   string    `json:"transaction_id"`                                    // transaction null if barang tidak terjual
+	StatusOutCode int       `validate:"required,numeric,min=1" json:"status_out_code"` // 1. Terjual, 2. Barang Hilang, 3. Barang Rusak, 4 Barang Sample
 }

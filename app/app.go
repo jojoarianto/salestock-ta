@@ -47,7 +47,7 @@ func (a *App) setRouters() {
 	a.Router.HandleFunc("/api/stock-ins", a.GetAllStockIns).Methods("GET")
 	a.Router.HandleFunc("/api/stock-ins/{stock_in_id}", a.GetStockIn).Methods("GET")
 	a.Router.HandleFunc("/api/stock-ins", a.CreateStockIns).Methods("POST")
-	a.Router.HandleFunc("/api/stock-ins/{id}", a.UpdateStockIns).Methods("PUT")
+	a.Router.HandleFunc("/api/stock-ins/{stock_in_id}", a.UpdateStockIns).Methods("PUT")
 	a.Router.HandleFunc("/api/stock-ins/{stock_in_id}", a.DeleteStockIns).Methods("DELETE")
 
 	// Routing for handling stock_in_progress

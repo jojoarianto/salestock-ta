@@ -139,7 +139,7 @@ func ExportCsvStockOuts(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 
 	for _, worker := range stockout {
 		var record []string
-		record = append(record, worker.StockOutTime.String())
+		record = append(record, worker.StockOutTime.Format("2006-01-02 15:04:05"))
 		record = append(record, worker.Product.Sku)
 		record = append(record, worker.Product.Name)
 		record = append(record, strconv.Itoa(worker.OutQty))

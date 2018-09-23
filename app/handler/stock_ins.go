@@ -2,13 +2,13 @@ package handler
 
 import (
 	// "fmt"
-	// "log"
 	"encoding/csv"
 	"encoding/json"
+	// "log"
 	"net/http"
 	"os"
 	"strconv"
-	"time"
+	// "time"
 
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
@@ -178,14 +178,8 @@ func GetStockinsOr404(db *gorm.DB, id int, w http.ResponseWriter, r *http.Reques
 }
 
 func ExportCsvStockIns(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
-	type Stock_in_report struct {
-		Waktu time.Time
-		Sku   string
-		Nama  string
-	}
-
-	var stockin []Stock_in_report
-	db.Raw("SELECT stock_ins.stock_in_time, products.sku, products.name FROM stock_ins INNER JOIN products ON stock_ins.product_id=products.id").Scan(&stockin)
+	stockin := []model.StockIn{}
+	db.Preload("Progress").Preload("Product").Find(&stockin)
 
 	csvData, err := os.Create("csv/export_stock_ins.csv")
 	if err != nil {
@@ -199,21 +193,40 @@ func ExportCsvStockIns(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	record = append(record, "Waktu")
 	record = append(record, "SKU")
 	record = append(record, "Nama Barang")
-	// record = append(record, "Jumlah Pemesanan")
-	// record = append(record, "Jumlah Diterima")
+	record = append(record, "Jumlah Pemesanan")
+	record = append(record, "Harga Diterima")
+	record = append(record, "Harga Beli")
+	record = append(record, "Total")
+	record = append(record, "Nomer Kwitansi")
+	record = append(record, "Catatan")
 	writer.Write(record)
 
 	for _, worker := range stockin {
 		var record []string
-		record = append(record, worker.Waktu.String())
-		record = append(record, worker.Sku)
-		record = append(record, worker.Nama)
-		// record = append(record, strconv.Itoa(worker.OrderQty))
-		// record = append(record, strconv.Itoa(worker.ReceivedQty))
+		record = append(record, worker.StockInTime.Format("2006/01/02 15:04"))
+		record = append(record, worker.Product.Sku)
+		record = append(record, worker.Product.Name)
+		record = append(record, strconv.Itoa(worker.OrderQty))
+		record = append(record, strconv.Itoa(worker.ReceivedQty))
+		record = append(record, strconv.Itoa(worker.PurchasePrice))
+		record = append(record, strconv.Itoa(worker.TotalPrice))
+		record = append(record, worker.Receipt)
+
+		progress := worker.Progress
+		note := ""
+		for _, childProgress := range progress {
+			note += childProgress.ProgressInTime.Format("2006/01/02")
+			note += " terima " + strconv.Itoa(childProgress.Qty) + "; "
+		}
+
+		if worker.StausInCode == 0 {
+			note += "Masih menunggu"
+		}
+		record = append(record, note)
 
 		writer.Write(record)
 	}
 	writer.Flush()
 
-	respondWithJson(w, http.StatusOK, "Export stock ins to csv success")
+	respondWithJson(w, http.StatusOK, "Export stock in to csv success check your export file at csv/export_stock_ins.csv")
 }

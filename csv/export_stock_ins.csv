@@ -1,2 +1,5 @@
-Waktu,SKU,Nama Barang
-0001-01-01 00:00:00 +0000 UTC,SSI-D00791015-LL-BWH,
+Waktu,SKU,Nama Barang,Jumlah Pemesanan,Harga Diterima,Harga Beli,Total,Nomer Kwitansi,Catatan
+2018/09/21 14:42,SSI-D00791015-LL-BWH,"Zalekia Plain Casual Blouse (L,Broken White)",54,129,77000,4158000,20170823-75140,2017/08/26 terima 1; 2017/08/26 terima 53; 2017/08/26 terima 50; 2017/08/26 terima 25; 
+2018/09/21 14:42,SSI-D00791015-LL-BWH,"Zalekia Plain Casual Blouse (L,Broken White)",100,20,77000,7700000,20170823-75140,2017/08/26 terima 20; Masih menunggu
+2018/09/21 14:42,SSI-D00791015-LL-BWH,"Zalekia Plain Casual Blouse (L,Broken White)",10,0,77000,770000,20170823-75140,Masih menunggu
+2018/09/21 14:42,SSI-D00864652-SS-NAV,"Deklia Plain Casual Blouse (S,Navy)",10,0,77000,770000,20170823-75140,Masih menunggu

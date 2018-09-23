@@ -45,7 +45,7 @@ type StockOut struct { // BARANG KELUAR
 	StockOutTime time.Time `validate:"required" json:"stock_out_time"`
 	ProductID    int       `validate:"required,numeric,min=1" json:"product_id" sql:"type:integer REFERENCES products(id) ON DELETE CASCADE ON UPDATE CASCADE"` // belongs to product
 	Product      Product   `json:"product"`
-	OutQty       int       `validate:"required,numeric,min=1" json:"out_qty"`
+	OutQty       int       `validate:"required,numeric" json:"out_qty"`
 	SellPrice    int       `validate:"omitempty,numeric" json:"sell_price"`
 	TotalPrice   int       `json:"total_price"`
 	Transaction  string    `json:"transaction_id"`                                    // transaction null if barang tidak terjual

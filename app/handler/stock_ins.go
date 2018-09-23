@@ -49,14 +49,14 @@ func CreateStockIns(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	product_id := vars["product_id"]
 	product := model.Product{}
-
-	// Search product
-	// Get record with primary key (only works for integer primary key)
 	if err := db.First(&product, product_id).Error; err != nil {
 		respondWithError(w, http.StatusNotFound, err.Error()) // print record not found
 		return
 	}
 	stockin.Product = product
+
+	// count total price
+	stockin.TotalPrice = stockin.PurchasePrice * stockin.OrderQty
 
 	if err := db.Save(&stockin).Error; err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())

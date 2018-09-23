@@ -37,32 +37,57 @@ func CreateStockOuts(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Validasi product, make sure product is exist
+	// validasi product, make sure product is exist
 	product := model.Product{}
 	if err := db.First(&product, stockout.ProductID).Error; err != nil {
 		respondWithError(w, http.StatusNotFound, "Product record not found") // print record not found
 		return
 	}
+
 	stockout.Product = product
+
+	//====== BEGIN TRANSACTION ========//
+
+	tx := db.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+
+	if tx.Error != nil {
+		respondWithError(w, http.StatusInternalServerError, "Error Transaction")
+		return
+	}
 
 	// count total_price
 	stockout.TotalPrice = stockout.SellPrice * stockout.OutQty
+	// create stock out
+	if err := tx.Create(&stockout).Error; err != nil {
+		tx.Rollback()
+		return
+	}
 
 	// update product stock
-	tmp := stockout.Product
-	tmp.Stocks = tmp.Stocks - stockout.OutQty
-	log.Println(tmp.Stocks)
-
-	if err := db.Save(&tmp).Error; err != nil {
-		respondWithError(w, http.StatusInternalServerError, err.Error())
+	if (product.Stocks - stockout.OutQty) < 0 {
+		tx.Rollback() // error stock not enough
+		respondWithError(w, http.StatusInternalServerError, "Stock not enough")
+		return
+	}
+	product.Stocks = product.Stocks - stockout.OutQty
+	if err := tx.Save(&product).Error; err != nil {
+		tx.Rollback()
 		return
 	}
 
-	// create stock out
-	if err := db.Save(&stockout).Error; err != nil {
-		respondWithError(w, http.StatusInternalServerError, err.Error())
+	stockout.Product = product // refill stockout product with the new one
+
+	if err := tx.Commit().Error; err != nil {
+		respondWithError(w, http.StatusInternalServerError, "Error Transaction")
 		return
 	}
+
+	//====== END OF TRANSACTION ========//
 
 	respondWithJson(w, http.StatusCreated, stockout)
 }

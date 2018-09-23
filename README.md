@@ -1,18 +1,19 @@
 # Software Engineer (Backend) Technical Assessment: Inventory
 
-**case study** : Toko Ijah
+This is Salestock backend technical assessment. Salestock give me a study case which called "**Toko Ijah**".  Main domain of this case is Inventory. 
 
-## Todo
- - [ ] **Mandotory:** create REST API to replace inventory spreadsheet
- - [ ] **Mandotory:** export data report in csv format
- - [ ] Optional : import data from csv/spreadsheet Toko Ijah (data migration)
- - [ ] Optional : CMS UI for inventory management
+Toko Ijah want to replace her spreadsheet by creating an application.   So, goal of this project is to provide REST API for toko ijah inventory application.
+
+
+## Feature
+* `Barang Masuk` Process of entering stock in (Barang masuk) can be done in stages (Progress Stock In)
+* `Barang Keluar` When stock not enough, the system will give rejection
 
 ## API
 
 #### /api/products
-* `GET` : Get all products
-* `POST` : Create a product
+* `GET` : Get all product
+* `POST` : Create a product* 
 
 #### /api/stock-ins
 * `GET` : Get all stock in
@@ -37,36 +38,33 @@ POST `/api/products` with json
 }
 ```
 
-POST `/api/stock-ins/3/progress` with json
-```json
-{
-    "stock_in_progress_time":"2018-09-21T14:42:49.77869956+07:00",
-    "qty":1
-}
-```
-
 POST `/api/stock-ins` with json
 ```json
 {
-	"transaction_time":"2018-09-21T14:42:49.77869956+07:00",
-	"product_id":1,
-	"order_qty":100,
-	"received_qty":0,
-	"purchase_price":1000,
-	"total_price":1000000,
-	"receipt":"ASP"
+    "stock_in_time":"2018-09-21T14:42:49.77869956+07:00",
+    "product_id":1,
+    "order_qty":54,
+    "purchase_price":77000,
+    "receipt":"20170823-75140"
 }
 ```
 
-POST `/api/stock-out` with json
+POST `/api/stock-ins/1/progress` with json
 ```json
 {
-    "transaction_time":"2018-09-21T14:42:49.77869956+07:00",
+    "stock_in_progress_time":"2017-08-26T14:42:49.77869956+07:00",
+    "qty":54
+}
+```
+
+POST `/api/stock-outs` with json
+```json
+{
+    "stock_out_time":"2018-01-01T14:42:49.77869956+07:00",
     "product_id":1,
     "out_qty":1,
-    "sell_price":100,
-    "total_price":1000,
-    "transaction_id":"testing",
+    "sell_price":130000,
+    "transaction_id":"20180101-023993",
     "status_out_code":1
 }
 ```
@@ -78,49 +76,88 @@ GET all stock in `/api/stock-in`
 [
     {
         "ID": 1,
-        "CreatedAt": "2018-09-22T15:36:03.697961927+07:00",
-        "UpdatedAt": "2018-09-22T17:05:34.153181848+07:00",
+        "CreatedAt": "2018-09-23T06:10:28.568665081+07:00",
+        "UpdatedAt": "2018-09-23T06:18:20.26672724+07:00",
         "DeletedAt": null,
-        "stock_in_time": "0001-01-01T00:00:00Z",
+        "stock_in_time": "2018-09-21T14:42:49.77869956+07:00",
         "product_id": 1,
-        "Product": {
+        "product": {
             "ID": 1,
-            "CreatedAt": "2018-09-22T15:35:37.861424368+07:00",
-            "UpdatedAt": "2018-09-22T17:05:34.152808305+07:00",
+            "CreatedAt": "2018-09-23T06:00:18.659528013+07:00",
+            "UpdatedAt": "2018-09-23T07:09:45.76298692+07:00",
             "DeletedAt": null,
             "sku": "SSI-D00791015-LL-BWH",
             "name": "Zalekia Plain Casual Blouse (L,Broken White)",
-            "stocks": 0
+            "stocks": 54
         },
-        "order_qty": 50,
-        "received_qty": 0,
-        "purchase_price": 1000,
-        "total_price": 100000,
-        "receipt": "IRIANTO-99-NEW-99",
-        "Progress": [
+        "order_qty": 54,
+        "received_qty": 54,
+        "purchase_price": 77000,
+        "total_price": 4158000,
+        "receipt": "20170823-75140",
+        "progress": [
             {
                 "ID": 1,
-                "CreatedAt": "2018-09-22T16:43:30.793632901+07:00",
-                "UpdatedAt": "2018-09-22T17:05:34.153397007+07:00",
+                "CreatedAt": "2018-09-23T06:16:09.830367981+07:00",
+                "UpdatedAt": "2018-09-23T06:16:09.830367981+07:00",
                 "DeletedAt": null,
-                "stock_in_progress_time": "2018-09-21T14:42:49.77869956+07:00",
+                "stock_in_progress_time": "2017-08-26T14:42:49.77869956+07:00",
                 "stock_ins_id": 1,
-                "qty": 3
+                "qty": 1
             },
             {
                 "ID": 2,
-                "CreatedAt": "2018-09-22T16:50:20.024516655+07:00",
-                "UpdatedAt": "2018-09-22T17:05:34.153575862+07:00",
+                "CreatedAt": "2018-09-23T06:18:20.211968571+07:00",
+                "UpdatedAt": "2018-09-23T06:18:20.211968571+07:00",
                 "DeletedAt": null,
-                "stock_in_progress_time": "2018-09-21T14:42:49.77869956+07:00",
+                "stock_in_progress_time": "2017-08-26T14:42:49.77869956+07:00",
                 "stock_ins_id": 1,
-                "qty": 5
+                "qty": 53
             }
-        ]
+        ],
+        "status_in_code": 1
     },
     ...
 ]
 ```
+
+
+## Todo
+ - [X] **Mandotory:** create REST API to replace inventory spreadsheet
+     - [X] Product (Barang)
+         - [X] Get all
+         - [X] Get by id 
+         - [X] Create 
+         - [ ] Update 
+         - [ ] Delete
+     - [X] Stock In (Barang Masuk)
+         - [X] Get all
+         - [X] Get by id
+         - [X] Create
+         - [ ] Update  
+         - [ ] Delete
+     - [X] Stock In Progress (Tahapan Barang Masuk)
+         - [X] Get all progress by stock_in_id
+         - [X] Create 
+         - [ ] Update 
+         - [ ] Delete  
+     - [X] Stock Out 
+         - [X] Get All
+         - [X] Get by id 
+         - [X] Create
+         - [ ] Update
+         - [ ] Delete 
+ - [ ] **Mandotory:** export data report in csv format
+     - [ ] Stock report
+     - [ ] Stock in report
+     - [ ] Stock out report
+     - [ ] Product valuation
+     - [ ] Sales report
+ - [ ] Optional : import data from csv/spreadsheet Toko Ijah (data migration)
+     - [ ] Import product
+     - [ ] import stock in
+     - [ ] Import stock out
+ - [ ] Optional : CMS UI for inventory management
 
 ## Note
 README will update soon

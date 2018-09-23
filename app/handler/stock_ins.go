@@ -93,12 +93,49 @@ func DeleteStockIns(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 		return // record not found
 	}
 
-	if err := db.Delete(&stockin).Error; err != nil {
+	//====== BEGIN TRANSACTION ========//
+
+	tx := db.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+
+	if tx.Error != nil {
+		respondWithError(w, http.StatusInternalServerError, "Error Transaction")
+		return
+	}
+
+	// update stock on product
+	product := stockin.Product
+	if (product.Stocks - stockin.ReceivedQty) < 0 {
+		tx.Rollback() // error stock not enough
+		respondWithError(w, http.StatusInternalServerError, "Stock not enough")
+		return
+	}
+	product.Stocks = product.Stocks - stockin.ReceivedQty
+
+	if err := tx.Save(&product).Error; err != nil {
+		tx.Rollback()
+		return
+	}
+	stockin.Product = product
+
+	// deleting prosess
+	if err := tx.Delete(&stockin).Error; err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	respondWithJson(w, http.StatusOK, nil)
+	if err := tx.Commit().Error; err != nil {
+		respondWithError(w, http.StatusInternalServerError, "Error Transaction")
+		return
+	}
+
+	//====== END OF TRANSACTION ========//
+
+	respondWithJson(w, http.StatusOK, "Delete success")
 }
 
 func UpdateStockIns(db *gorm.DB, w http.ResponseWriter, r *http.Request) {

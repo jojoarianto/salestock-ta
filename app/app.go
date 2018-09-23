@@ -39,6 +39,8 @@ func (a *App) setRouters() {
 	// Routing for handling products
 	a.Router.HandleFunc("/api/products", a.GetAllProducts).Methods("GET")
 	a.Router.HandleFunc("/api/products", a.CreateProduct).Methods("POST")
+	// a.Router.HandleFunc("/api/products/{product_id}", a.CreateProduct).Methods("PUT")
+	a.Router.HandleFunc("/api/products/{product_id}", a.DeleteProduct).Methods("DELETE")
 
 	// Routing for handling stock_in
 	a.Router.HandleFunc("/api/stock-ins", a.GetAllStockIns).Methods("GET")
@@ -65,9 +67,19 @@ func (a *App) GetAllProducts(w http.ResponseWriter, r *http.Request) {
 	handler.GetAllProducts(a.DB, w, r)
 }
 
-// handler for create product
+// handler for create a product
 func (a *App) CreateProduct(w http.ResponseWriter, r *http.Request) {
 	handler.CreateProduct(a.DB, w, r)
+}
+
+// handler for update a product
+func (a *App) UpdateProduct(w http.ResponseWriter, r *http.Request) {
+	handler.UpdateProduct(a.DB, w, r)
+}
+
+// handler for update a product
+func (a *App) DeleteProduct(w http.ResponseWriter, r *http.Request) {
+	handler.DeleteProduct(a.DB, w, r)
 }
 
 // =============================

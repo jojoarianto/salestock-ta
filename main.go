@@ -1,8 +1,8 @@
 package main
 
 import (
-	"salestock-ta/app"    // import app
-	"salestock-ta/config" // import config
+	"github.com/jojoarianto/salestock-ta/app"    // import app
+	"github.com/jojoarianto/salestock-ta/config" // import config
 )
 
 func main() {

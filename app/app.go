@@ -4,9 +4,9 @@ import (
 	"log"
 	"net/http"
 
-	"salestock-ta/app/handler"
-	"salestock-ta/app/model"
-	"salestock-ta/config"
+	"github.com/jojoarianto/salestock-ta/app/handler"
+	"github.com/jojoarianto/salestock-ta/app/model"
+	"github.com/jojoarianto/salestock-ta/config"
 
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm" // Go ORM (Object Relational Mapping) for sql

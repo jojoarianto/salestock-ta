@@ -1,18 +1,18 @@
 package handler
 
 import (
+	// "log"
+	// "io"
 	"encoding/csv"
 	"encoding/json"
-	// "log"
 	"net/http"
 	"os"
 	"strconv"
-	// "io"
 
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
+	"github.com/jojoarianto/salestock-ta/app/model"
 	"gopkg.in/go-playground/validator.v9"
-	"salestock-ta/app/model"
 )
 
 // handler for get all data stock out

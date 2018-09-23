@@ -26,11 +26,15 @@ func GetAllStockIns(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 
 // handler for get single data stockin
 func GetStockIn(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r) // get parameter url
-	id := vars["id"]
+	vars := mux.Vars(r)
+	stock_in_id, err := strconv.Atoi(vars["stock_in_id"])
+	if err != nil {
+		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
 
 	stockin := model.StockIn{}
-	if err := db.Preload("Progress").Preload("Product").Find(&stockin, id).Error; err != nil {
+	if err := db.Preload("Progress").Preload("Product").Find(&stockin, stock_in_id).Error; err != nil {
 		respondWithError(w, http.StatusNotFound, err.Error())
 		return
 	}

@@ -186,6 +186,6 @@ func (a *App) ImportCsvProducts(w http.ResponseWriter, r *http.Request) {
 
 // Run the app on it's router
 func (a *App) Run(host string) {
-	log.Printf("Start a server on port %s", host)
+	log.Printf("Start a server on http://127.0.0.1:%s", host)
 	log.Fatal(http.ListenAndServe(host, a.Router))
 }

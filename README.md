@@ -13,11 +13,15 @@ Toko Ijah want to replace her spreadsheet by creating an application.   So, goal
 ```bash
 # Download this project
 go get github.com/jojoarianto/salestock-ta
+
+# It's take several minute to download project
 ```
+
+Make sure you have set up $GOPATH
 
 ```bash
 # Build and Run
-cd salestock-ta
+cd $GOPATH/src/github.com/jojoarianto/salestock-ta
 go build
 ./salestock-ta
 

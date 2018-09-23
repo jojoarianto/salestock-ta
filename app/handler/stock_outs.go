@@ -2,7 +2,7 @@ package handler
 
 import (
 	"encoding/json"
-	"log"
+	// "log"
 	"net/http"
 
 	// "github.com/gorilla/mux"

@@ -59,6 +59,9 @@ func (a *App) setRouters() {
 
 	// Routing for export csv handling
 	a.Router.HandleFunc("/export/products", a.ExportCsvProducts).Methods("GET")
+	a.Router.HandleFunc("/export/stock-ins", a.ExportCsvStockIns).Methods("GET")
+
+	a.Router.HandleFunc("/import/products", a.ImportCsvProducts).Methods("GET")
 }
 
 // =============================
@@ -148,6 +151,18 @@ func (a *App) CreateStockOuts(w http.ResponseWriter, r *http.Request) {
 
 func (a *App) ExportCsvProducts(w http.ResponseWriter, r *http.Request) {
 	handler.ExportCsvProducts(a.DB, w, r)
+}
+
+func (a *App) ExportCsvStockIns(w http.ResponseWriter, r *http.Request) {
+	handler.ExportCsvStockIns(a.DB, w, r)
+}
+
+// =============================
+//    IMPORT CSV
+// =============================
+
+func (a *App) ImportCsvProducts(w http.ResponseWriter, r *http.Request) {
+	handler.ImportCsvProducts(a.DB, w, r)
 }
 
 // Run the app on it's router

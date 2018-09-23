@@ -1,10 +1,11 @@
 package handler
 
 import (
-	// "fmt"
-	// "log"
 	"encoding/csv"
 	"encoding/json"
+	"fmt"
+	"io"
+	"log"
 	"net/http"
 	"os"
 	"strconv"
@@ -117,4 +118,37 @@ func ExportCsvProducts(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	writer.Flush()
 
 	respondWithJson(w, http.StatusOK, "Export products to csv success")
+}
+
+// handler function to import products
+func ImportCsvProducts(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
+	type ProductInsert struct {
+		Sku  string
+		Name string
+	}
+	csvData, _ := os.Open("csv/import_products.csv")
+
+	sqlStr := ""
+	reader := csv.NewReader(csvData)
+	var product []ProductInsert
+	for {
+		line, error := reader.Read()
+		if error == io.EOF { // end of line
+			break
+		} else if error != nil {
+			log.Fatal(error)
+		}
+
+		product = append(product, ProductInsert{
+			Sku:  line[0],
+			Name: line[1],
+		})
+
+		sqlStr += fmt.Sprintf("INSERT INTO products (created_at, updated_at, sku, name) VALUES (datetime('now','localtime'), datetime('now','localtime'),'%s', '%s'); ", line[0], line[1])
+	}
+
+	db.Exec(sqlStr)
+	peopleJson, _ := json.Marshal(product)
+	// fmt.Println(string(peopleJson))
+	respondWithJson(w, http.StatusOK, string(peopleJson))
 }

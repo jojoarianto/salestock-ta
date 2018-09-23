@@ -47,13 +47,13 @@ type StockIn struct {
     gorm.Model
     StockInTime   time.Time
     ProductID     int
-    Product       Product 
+    Product       Product // belongs to
     OrderQty      int 
     ReceivedQty   int 
     PurchasePrice int 
     TotalPrice    int 
     Receipt       string 
-    Progress      []StockInProgress 
+    Progress      []StockInProgress // has many progress
     StausInCode   int // 0. waiting, 1 completed
 }
 ```
@@ -62,7 +62,7 @@ Stock In Progress (Progress Barang Masuk)
 type StockInProgress struct { 
     gorm.Model
     ProgressInTime time.Time
-    StockInsID     int
+    StockInsID     int // belongs to
     Qty            int 
 }
 ```
@@ -71,7 +71,7 @@ Stock Outs (Barang Keluar)
 type StockOut struct { 
     gorm.Model
     StockOutTime  time.Time
-    ProductID     int 
+    ProductID     int  // belongs to
     Product       Product 
     OutQty        int
     SellPrice     int 
@@ -100,7 +100,7 @@ type StockOut struct {
          - [X] Get all
          - [X] Get by id
          - [X] Create
-         - [ ] Update  
+         - [X] Update  
          - [X] Delete
      - [X] Stock In Progress (Tahapan Barang Masuk)
          - [X] Get all progress by stock_in_id
@@ -126,26 +126,60 @@ type StockOut struct {
  - [ ] Optional : CMS UI for inventory management
 
 
-## API
+## API ENDPOINT
 
 #### /api/products
 * `GET` : Get all product
 * `POST` : Create a product* 
 
+#### /api/products/:product_id
+* `GET` : Get a product by id
+* `PUT` : Update a product
+* `DELETE` : Delete a product* 
+
 #### /api/stock-ins
 * `GET` : Get all stock in
 * `POST` : Create a stock in
 
-#### /api/stock-ins/:id
+#### /api/stock-ins/:stock_in_id
 * `GET` : Get a stock in
 * `DELETE` : Delete a stock in
 * `PUT` : Update a stock in
 
-#### /api/stock-ins/:id/progress
-* `GET` : Get a all progress stock in by id stock in 
+#### /api/stock-ins/:stock_in_id/progress
+* `GET` : Get all stock in progress by id stock in 
 * `POST` : Create a stock in progress
 
-## Usage
+#### /api/stock-outs
+* `GET` : Get all stock out
+* `POST` : Create a stock outs
+
+#### /api/stock-outs/:stock_out_id
+* `GET` : Get a stock out
+
+## Export & Import URL
+#### /export/products
+* `GET` : Export to get all product
+* Out file directory : `csv/export_products.csv` 
+
+#### /export/stock_ins
+* `GET` : Export to get all stock in transaction 
+* Out file directory : `csv/export_stock_ins.csv` 
+
+#### /export/stock_Outs
+* `GET` : Export to get all stock out transaction 
+ * Out file directory : `csv/export_stock_outs.csv` 
+
+#### /export/sales
+* `GET` : Export to get all sales report transaction 
+* Out file directory : `csv/export_sales_report.csv` 
+
+#### /import/products
+* `GET` : Import products from csv file
+* File directory : `csv/import_products.csv`
+
+
+### Usage Examples
 
 POST `/api/products` with json
 ```json
@@ -186,7 +220,7 @@ POST `/api/stock-outs` with json
 }
 ```
 
-## Response
+### Response
 
 GET all stock in `/api/stock-ins`
 ```json
@@ -267,7 +301,18 @@ GET all stock outs `/api/stock-outs`
 ]
 ```
 
-### Export Csv
+### Examples of Export Csv Result
+
+Export csv stock ins `GET` `/export/stock-ins`
+```csv
+SKU,Nama Item,Jumlah Sekarang
+SSI-D00791015-LL-BWH,"Zalekia Plain Casual Blouse (L,Broken White)",83
+SSI-D00791077-MM-BWH,"Zalekia Plain Casual Blouse (M,Broken White)",0
+SSI-D00791091-XL-BWH,"Zalekia Plain Casual Blouse (XL,Broken White)",0
+SSI-D00864612-LL-NAV,"Deklia Plain Casual Blouse (L,Navy)",0
+SSI-D00864652-SS-NAV,"Deklia Plain Casual Blouse (S,Navy)",8
+
+```
 
 Export csv stock ins `GET` `/export/stock-ins`
 ```csv
@@ -299,4 +344,3 @@ ID Pesanan,Waktu,SKU,Nama Barang,Jumlah,Harga Jual,Total,Harga Beli,Laba
 20180109-853724,2018-01-01 14:42:49,SSI-D00791015-LL-BWH,"Zalekia Plain Casual Blouse (L,Broken White)",1,97000,97000,77000,20000
 20180109-853724,2018-01-01 14:42:49,SSI-D00791015-LL-BWH,"Zalekia Plain Casual Blouse (L,Broken White)",2,100000,200000,77000,46000
 ```
-

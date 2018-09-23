@@ -39,6 +39,7 @@ func (a *App) setRouters() {
 	// Routing for handling products
 	a.Router.HandleFunc("/api/products", a.GetAllProducts).Methods("GET")
 	a.Router.HandleFunc("/api/products", a.CreateProduct).Methods("POST")
+	a.Router.HandleFunc("/api/products/{product_id}", a.GetProduct).Methods("GET")
 	a.Router.HandleFunc("/api/products/{product_id}", a.UpdateProduct).Methods("PUT")
 	a.Router.HandleFunc("/api/products/{product_id}", a.DeleteProduct).Methods("DELETE")
 
@@ -73,6 +74,11 @@ func (a *App) setRouters() {
 // handler for get all product
 func (a *App) GetAllProducts(w http.ResponseWriter, r *http.Request) {
 	handler.GetAllProducts(a.DB, w, r)
+}
+
+// handler for get a product
+func (a *App) GetProduct(w http.ResponseWriter, r *http.Request) {
+	handler.GetProduct(a.DB, w, r)
 }
 
 // handler for create a product

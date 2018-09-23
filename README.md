@@ -141,7 +141,7 @@ GET all stock in `/api/stock-in`
  - [X] **Mandotory:** create REST API to replace inventory spreadsheet
      - [X] Product (Barang)
          - [X] Get all
-         - [ ] Get by id 
+         - [X] Get by id 
          - [X] Create 
          - [X] Update 
          - [X] Delete

@@ -23,6 +23,26 @@ func GetAllProducts(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	respondWithJson(w, http.StatusOK, products)
 }
 
+// get a single product
+func GetProduct(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
+	product := model.Product{}
+
+	vars := mux.Vars(r)
+
+	product_id, err := strconv.Atoi(vars["product_id"])
+	if err != nil {
+		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	if err := db.First(&product, product_id).Error; err != nil {
+		respondWithError(w, http.StatusNotFound, err.Error())
+		return
+	}
+
+	respondWithJson(w, http.StatusOK, product)
+}
+
 // create a product
 func CreateProduct(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	product := model.Product{}

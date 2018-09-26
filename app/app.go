@@ -58,6 +58,7 @@ func (a *App) setRouters() {
 	a.Router.HandleFunc("/api/stock-outs", a.GetAllStockOuts).Methods("GET")
 	a.Router.HandleFunc("/api/stock-outs", a.CreateStockOuts).Methods("POST")
 	a.Router.HandleFunc("/api/stock-outs/{stock_out_id}", a.GetStockOut).Methods("GET")
+	a.Router.HandleFunc("/api/stock-outs/{stock_out_id}", a.DeleteStockOut).Methods("DELETE")
 
 	// Routing for export csv handling
 	a.Router.HandleFunc("/export/products", a.ExportCsvProducts).Methods("GET")
@@ -158,6 +159,11 @@ func (a *App) GetStockOut(w http.ResponseWriter, r *http.Request) {
 // handler for create stock_out
 func (a *App) CreateStockOuts(w http.ResponseWriter, r *http.Request) {
 	handler.CreateStockOuts(a.DB, w, r)
+}
+
+// handler for delete single stock_out
+func (a *App) DeleteStockOut(w http.ResponseWriter, r *http.Request) {
+	handler.DeleteStockOut(a.DB, w, r)
 }
 
 // =============================

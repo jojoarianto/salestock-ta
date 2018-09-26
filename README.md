@@ -89,7 +89,7 @@ type StockOut struct {
 
 
 ## Product Items Backlog
- - [X] **Mandotory:** create REST API to replace inventory spreadsheet
+ - [X] **Mandatory:** create REST API to replace inventory spreadsheet
      - [X] Product (Barang)
          - [X] Get all
          - [X] Get by id 
@@ -112,8 +112,8 @@ type StockOut struct {
          - [X] Get by id 
          - [X] Create
          - [ ] Update
-         - [ ] Delete 
- - [X] **Mandotory:** export data report in csv format
+         - [X] Delete 
+ - [X] **Mandatory:** export data report in csv format
      - [X] Stock (Catatan Jumlah Barang)
      - [X] Stock in (Catatan Barang Masuk)
      - [X] Stock out (Catatan Barang Keluar)

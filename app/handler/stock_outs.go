@@ -116,6 +116,63 @@ func CreateStockOuts(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	respondWithJson(w, http.StatusCreated, stockout)
 }
 
+func DeleteStockOut(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
+	stockout := model.StockOut{}
+
+	vars := mux.Vars(r)
+
+	stock_out_id, err := strconv.Atoi(vars["stock_out_id"])
+	if err != nil {
+		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	if err := db.Preload("Product").Find(&stockout, stock_out_id).Error; err != nil {
+		respondWithError(w, http.StatusNotFound, err.Error())
+		return
+	}
+
+	//====== BEGIN TRANSACTION ========//
+
+	tx := db.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+
+	if tx.Error != nil {
+		respondWithError(w, http.StatusInternalServerError, "Error Transaction")
+		return
+	}
+
+	// update stock on product
+	product := stockout.Product
+	product.Stocks = product.Stocks + stockout.OutQty
+
+	if err := tx.Save(&product).Error; err != nil {
+		tx.Rollback()
+		return
+	}
+	stockout.Product = product
+
+	// deleting prosess
+	if err := tx.Delete(&stockout).Error; err != nil {
+		respondWithError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	if err := tx.Commit().Error; err != nil {
+		respondWithError(w, http.StatusInternalServerError, "Error Transaction")
+		return
+	}
+
+	//====== END OF TRANSACTION ========//
+
+	respondWithJson(w, http.StatusOK, "Delete success")
+}
+
+// handler for export stock out
 func ExportCsvStockOuts(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	stockout := []model.StockOut{}
 	db.Preload("Product").Find(&stockout)

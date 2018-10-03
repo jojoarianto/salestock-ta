@@ -116,6 +116,45 @@ func CreateStockOuts(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	respondWithJson(w, http.StatusCreated, stockout)
 }
 
+// handler for update a single stock out
+func UpdateStockOut(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
+	stockout := model.StockOut{}
+
+	vars := mux.Vars(r)
+
+	stock_out_id, err := strconv.Atoi(vars["stock_out_id"])
+	if err != nil {
+		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	// find product by product id
+	if err := db.Preload("Product").Find(&stockout, stock_out_id).Error; err != nil {
+		respondWithError(w, http.StatusNotFound, err.Error())
+		return
+	}
+
+	//====== BEGIN TRANSACTION ========//
+
+	tx := db.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+
+	if tx.Error != nil {
+		respondWithError(w, http.StatusInternalServerError, "Error Transaction")
+		return
+	}
+
+	// doing update stock out data (on progress)
+
+	//====== END OF TRANSACTION ========//
+
+	respondWithJson(w, http.StatusOK, stockout)
+}
+
 func DeleteStockOut(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	stockout := model.StockOut{}
 
